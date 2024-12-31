@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Skyline</title>
+    <style>
+    .iframe-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Adds space between the iframes */
+        align-items: center; /* Center the iframes horizontally */
+    }
+    iframe {
+        width: 50vw; /* 50% of the viewport width */
+        height: 20vh; /* 20% of the viewport height */
+        border: none;
+    }
+    </style>
+    <!-- Google tag (gtag.js) -->
+<script>
+    function cgtag(Args){
+      const launchers = ["colab","localfile","jupyter","vscode"];
+      const urlParams = {
+        v: '2',
+        tid: 'G-SN1X879JX5',
+        gtm: '45je4510v868754765za200',
+        cid: '83823701.1706735226',
+        _p :  '1715110000025',
+        _s : '1',
+        sid: '17151100025',
+        sct: '3',                
+        seg: "7",  
+        en: 'page_view',
+        ///
+        dp: window.location.href,
+        dl: document.title ,
+        dt: 'cloud',
+        ul: 'en-us',
+        'ep.chart': Args,
+      };
+      
+          const params = new URLSearchParams(urlParams).toString();
+          fetch("https://www.google-analytics.com/g/collect?"+params, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "accept": "*/*",
+              "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+              "priority": "u=4, i",
+              "sec-ch-ua": "\"Chromium\";v=\"124\", \"Google Chrome\";v=\"124\", \"Not-A.Brand\";v=\"99\"",
+              "sec-ch-ua-mobile": "?0",
+              "sec-ch-ua-platform": "\"Windows\"",
+              "sec-fetch-dest": "empty",
+              "sec-fetch-mode": "no-cors",
+              "sec-fetch-site": "cross-site"
+            },
+    
+          });
+    
+    }
+    </script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-2F8H0XZ7WF"></script>
+    <script>
+    
+      if (location.protocol === "file:") {
+        cgtag("modx")
+      } else {
+    
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2F8H0XZ7WF',
+            {page_path: location.pathname + location.search + location.hash});
+      }
+    
+    </script>
+</head>
+<body>
+<body>
+    <div class="iframe-container">
+        <div class="skyline">
+            <p>Year: 2024</p>
+            <iframe src="https://git-skyline.huakun.tech/contribution/github/jinsanity07git/embed?year=2024"></iframe>
+        </div>
+        <div class="skyline">
+            <p>Year: 2023</p>
+            <iframe src="https://git-skyline.huakun.tech/contribution/github/jinsanity07git/embed?year=2023"></iframe>
+        </div>  
+        <div class="skyline">
+            <p>Year: 2022</p>
+            <iframe src="https://git-skyline.huakun.tech/contribution/github/jinsanity07git/embed?year=2022"></iframe>
+        </div>
+        <div class="skyline">
+            <p>Year: 2021</p>
+            <iframe src="https://git-skyline.huakun.tech/contribution/github/jinsanity07git/embed?year=2021"></iframe>
+        </div>
+        <div class="skyline">
+            <p>Year: 2020</p>
+            <iframe src="https://git-skyline.huakun.tech/contribution/github/jinsanity07git/embed?year=2020"></iframe>
+        </div>
+    </div>
+</body>
+</body>
+</html>
