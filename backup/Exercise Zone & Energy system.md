@@ -91,6 +91,59 @@ Training this system <u>enhances the body’s ability to utilize oxygen</u>, and
 
 ![Energy System Interaction and Relative Contribution During ...](https://media.springernature.com/lw685/springer-static/image/art%3A10.2165%2F00007256-200131100-00003/MediaObjects/40279_2012_31100725_Fig5.jpg) 
 
+![img](https://cdn.prod.website-files.com/626814af1998404201198e4b/63935210937373aab0c79d1a_creatine-and-energy-systems.png)
+
+* Phosphagen system : 磷酸原系统
+* Glycolysis : 糖酵解
+* pyruvate : 丙酮酸
+  * 在糖酵解结束时产生的**丙酮酸**（pyruvate）通常进入线粒体进入柠檬酸循环（citric acid cycle）
+* Creatine Kinase : 肌酸激酶
+* Krebs cycle :  克雷布斯循环
+  * 三羧酸循环（tricarboxylic acid cycle，TCA cycle）又称柠檬酸循环（citric acid cycle）、克雷布斯循环（*Krebs cycle*）
+* phosphocreatine ： 磷酸肌酸
+
+
+
+##  20‑minute fat‑burning myth
+
+the 20‑minute fat‑burning myth endures because it neatly packages complex exercise physiology into a simple, persuasive slogan—but it does not reflect how our bodies actually mobilize both fats and carbohydrates continuously throughout any bout of activity. Focusing on total caloric expenditure, exercise intensity, consistency, and overall lifestyle choices is a far more effective strategy for fat loss than waiting for a hypothetical “20‑minute switch.”
+
+**Energy Use During Exercise: A Time-Dependent Shift**
+
+- **First Few Minutes (0-5 min):**
+  - Body relies on **ATP-PCr (phosphocreatine) system** and **anaerobic glycolysis** (fast energy).
+  - Primary fuel: **Muscle glycogen (stored carbs)**.
+- **5-20 Minutes:**
+  - **Glycolysis dominates**, still mostly using carbs (blood glucose + glycogen).
+  - Fat oxidation begins but remains low.
+- **After ~20 Minutes:**
+  - **Aerobic metabolism becomes dominant.**
+  - **Fat oxidation increases** as glycogen depletes and adrenaline stimulates lipolysis (fat breakdown).
+
+> * muscle glycogen : 肌糖原
+> * glycolysis ：糖酵解
+> * stored carbs ： **糖原储备**（专业术语，特指存储在肝脏和肌肉中的碳水化合物）
+> * Glycogen Depletion : 糖原耗尽
+> * adrenaline  : 肾上腺素 
+> * lipolysis : 脂肪分解
+> * Aerobic Metabolism : **有氧代謝**
+
+
+
+Why It Persists—and What Really Matters
+
+1. **Total Calorie Burn**: <u>Maximizing overall energy expenditure</u> (through higher intensity or longer duration) drives greater fat loss than chasing a substrate‑use threshold [Fitness Tutor](https://www.fitness-tutor.com/post/debunking-the-20-mins-fat-burning-myth).
+
+2. **EPOC (“Afterburn”)**: Intense workouts trigger excess <u>post‑exercise oxygen consumption</u>, burning additional calories—and fat—for hours afterward [Fitness Tutor](https://www.fitness-tutor.com/post/debunking-the-20-mins-fat-burning-myth).
+
+3. **Consistency and Variety**: A mix of intensities and durations prevents plateaus and overuse injuries, supporting long‑term adherence far better than rigid rules [Verywell Fit](https://www.verywellfit.com/body-into-fat-burning-machine-1231548).
+
+   > substrate : 基板 · 基底
+   >
+   > plateaus :  没有变化, 平稳期;停滞期, 稳定；停滞
+
+
+
 ## Practice 
 
 ### Zone 4
@@ -189,6 +242,7 @@ MAX HR : 157 BPM
 
 ![Infographic - Understanding Zone 2 Training](https://inscyd.com/wp-content/uploads/2023/10/Infographic-Understanding-Zone-2-Training.png) 
 
+## 
 
 ## References
 [^1]: https://www.sportmanitoba.ca/https-www-sportmanitoba-ca-sport-science-report-training-energy-systems/
