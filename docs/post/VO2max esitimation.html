@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark_colorblind" data-light-theme="dark_colorblind" lang="en">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="To estimate your maximal oxygen uptake (VO₂ max) from routine runs, you’ll need to:
+
+1.">
+<meta property="og:title" content="VO2max esitimation">
+<meta property="og:description" content="To estimate your maximal oxygen uptake (VO₂ max) from routine runs, you’ll need to:
+
+1.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jinsanity07git.github.io/blog//post/VO2max%20esitimation.html">
+<meta property="og:image" content="https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg">
+<title>VO2max esitimation</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+<style>#postBody{font-size:20px}</style>
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">VO2max esitimation</h1>
+<div class="title-right">
+    <a href="https://jinsanity07git.github.io/blog/" id="buttonHome" class="btn btn-invisible circle" title="home">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/jinsanity07git/blog/issues/12" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="switch theme">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>To estimate your maximal oxygen uptake (VO₂ max) from routine runs, you’ll need to:</p>
+<ol>
+<li><strong>Estimate the oxygen cost (VO₂) of your running pace</strong>,</li>
+<li><strong>Determine your maximum heart rate (HRₘₐₓ)</strong> (or measure it directly in a truly maximal effort), and</li>
+<li><strong>Extrapolate your VO₂ max</strong> from the submaximal data.</li>
+</ol>
+<p>Below is a step‑by‑step recipe using the three runs you logged.</p>
+<hr>
+<h2>1. Convert pace to speed in m/min</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>date</th>
+<th>km/h</th>
+<th>→ m/min</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019-01‑28</td>
+<td>9.141 km/h</td>
+<td>9.141 × 1000 ÷ 60 ≈ <strong>152.35 m/min</strong></td>
+</tr>
+<tr>
+<td>2019-01‑29</td>
+<td>8.132 km/h</td>
+<td>8.132 × 1000 ÷ 60 ≈ <strong>135.53 m/min</strong></td>
+</tr>
+<tr>
+<td>2019-02‑07</td>
+<td>8.602 km/h</td>
+<td>8.602 × 1000 ÷ 60 ≈ <strong>143.37 m/min</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>2. Estimate the oxygen cost (VO₂) at that pace</h2>
+<p>For level ground, the ACSM running‐economy equation applies:<br>
+$$<br>
+\dot V O_{2,\text{ex}} ;(\mathrm{ml/kg/min})<br>
+= 0.2 \times \text{speed (m/min)} + 3.5<br>
+$$</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>date</th>
+<th>speed (m/min)</th>
+<th>VO₂_ex (ml/kg/min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019-01‑28</td>
+<td>152.35</td>
+<td>0.2·152.35 + 3.5 ≈ <strong>33.0</strong></td>
+</tr>
+<tr>
+<td>2019-01‑29</td>
+<td>135.53</td>
+<td>0.2·135.53 + 3.5 ≈ <strong>30.6</strong></td>
+</tr>
+<tr>
+<td>2019-02‑07</td>
+<td>143.37</td>
+<td>0.2·143.37 + 3.5 ≈ <strong>32.2</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<hr>
+<h2>3. Estimate your HRₘₐₓ</h2>
+<p>If you haven’t performed an all‐out test, use one of the age‑based formulas as an approximation.<br>
+A common one is Tanaka et al.:<br>
+$$<br>
+\text{HR}_{\max} \approx 208 - 0.7 \times \text{age}<br>
+$$<br>
+<em>(If you know your true maximal heart rate from a field or laboratory test, use that.)</em></p>
+<hr>
+<h2>4. Extrapolate VO₂ max from submaximal effort</h2>
+<p>Under the linear assumption between heart rate and VO₂:<br>
+$$<br>
+\dot V O_{2,\max}<br>
+;=;<br>
+\dot V O_{2,\text{ex}}<br>
+\times<br>
+\frac{\text{HR}<em>{\max}}{\text{HR}</em>{\text{ex}}}<br>
+$$<br>
+Where:</p>
+<ul>
+<li>
+$\dot V O_{2,\text{ex}}$ is from step 2,</li>
+<li>
+$\text{HR}_{\text{ex}}$ is the <strong>average</strong> heart rate you recorded,</li>
+<li>
+$\text{HR}_{\max}$ is from step 3.</li>
+</ul>
+<hr>
+<h3>Example calculation</h3>
+<p>Let’s say you’re 30 years old. Then<br>
+$$<br>
+\text{HR}<em>{\max} \approx 208 - 0.7\times30 = 187\ \text{bpm}.<br>
+$$<br>
+For your 2019-01‑28 run (VO₂_ex ≈ 33.0 ml/kg/min, HR_ex ≈ 167.9 bpm):<br>
+$$<br>
+\dot V O</em>{2,\max}<br>
+= 33.0 \times \frac{187}{167.9}<br>
+\approx 33.0 \times 1.114<br>
+\approx \mathbf{36.8\ ml/kg/min}.<br>
+$$<br>
+You would repeat that for each run:</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>date</th>
+<th>VO₂_ex</th>
+<th>HR_ex (bpm)</th>
+<th>HRₘₐₓ (187)</th>
+<th>VO₂_max (ml/kg/min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2019-01‑28</td>
+<td>33.0</td>
+<td>167.9</td>
+<td>187</td>
+<td>33.0 × 187/167.9 ≈ <strong>36.8</strong></td>
+</tr>
+<tr>
+<td>2019-01‑29</td>
+<td>30.6</td>
+<td>157.1</td>
+<td>187</td>
+<td>30.6 × 187/157.1 ≈ <strong>36.4</strong></td>
+</tr>
+<tr>
+<td>2019-02‑07</td>
+<td>32.2</td>
+<td>161.6</td>
+<td>187</td>
+<td>32.2 × 187/161.6 ≈ <strong>37.3</strong></td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
+<p>Averaging these gives you a VO₂ max in the neighborhood of <strong>36–37 ml/kg/min</strong>.</p>
+<hr>
+<h2>5. Alternative: Uth–Sørensen submaximal test</h2>
+<p>If you also know your <strong>resting</strong> heart rate (HR_rest), you can use the simpler Uth formula:<br>
+$$<br>
+\dot V O_{2,\max}<br>
+;=;<br>
+15.3 \times \frac{\text{HR}<em>{\max}}{\text{HR}</em>{\text{rest}}}<br>
+$$<br>
+This bypasses the need to estimate VO₂_ex from pace, but <strong>does</strong> require an accurate resting heart rate (measured in supine rest, ideally first thing in the morning).</p>
+<hr>
+<h3>Caveats &amp; Tips</h3>
+<ul>
+<li><strong>Accuracy</strong> hinges on**:
+<ul>
+<li>HRₘₐₓ** being close to your true maximum.</li>
+<li>The linear HR–VO₂ relationship (valid ~50–85% of VO₂ max).</li>
+<li>A perfectly level course (no hills).</li>
+</ul>
+</li>
+<li><strong>Field vs. lab:</strong> A maximal graded exercise test in a lab remains the gold standard; these submaximal estimates usually carry an error of ±5–10%.</li>
+<li><strong>Practical use:</strong> Track your estimates over weeks; a rising VO₂ max suggests improving fitness (even if the absolute number is slightly off).</li>
+</ul>
+<hr>
+<p><strong>Bottom line:</strong></p>
+<ol>
+<li>Compute your running VO₂ at submax pace using the ACSM equation.</li>
+<li>Estimate or measure your HRₘₐₓ (and maybe HR_rest).</li>
+<li>Extrapolate to VO₂ max via the HR ratio (or Uth formula).</li>
+</ol>
+<p>That workflow will yield a reasonable VO₂ max estimate from routine GPS + HR runs.<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0808198e-7a10-43da-8449-c8cc1d6d5a5b"><img src="https://github.com/user-attachments/assets/0808198e-7a10-43da-8449-c8cc1d6d5a5b" alt="Image" style="max-width: 100%;"></a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">comments</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://jinsanity07git.github.io/blog/">Jinsanity</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if("03/25/2024"!=""){
+    var startSite=new Date("03/25/2024");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="run "+diffDay+" days"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","jinsanity07git/blog");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+<script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script async src='https://www.googletagmanager.com/gtag/js?id=G-2F8H0XZ7WF'></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-2F8H0XZ7WF');</script><script>console.log(1);if (document.getElementById('user-content-busuanzi') !== null){document.getElementById('user-content-busuanzi').id='busuanzi_container_site_uv';};busuanzi=document.getElementById('busuanzi_container_site_uv');busuanzi.style.display='inline';busuanzi.childNodes[1].id='busuanzi_value_site_uv';busuanzi.childNodes[3].id='busuanzi_value_site_pv';</script><script async src='//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'></script><script>busuanzi.style.display='inline';</script><script>MathJax = {tex: {inlineMath: [["$", "$"]]}};</script><script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</html>
