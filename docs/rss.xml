@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Thu, 05 Jun 2025 21:57:49 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>跑步训练课表设计</title><link>https://jinsanity07git.github.io/blog//post/pao-bu-xun-lian-ke-biao-she-ji.html</link><description>
-
-
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Fri, 06 Jun 2025 02:50:10 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>跑步训练课表设计</title><link>https://jinsanity07git.github.io/blog//post/pao-bu-xun-lian-ke-biao-she-ji.html</link><description>
 
 # 大众跑者（每周）
 
 * 强度课 ， 1 次
-* 长距离耐力课 (LSD stands for Long Slow Distance)， 1次
+* 长距离耐力课， LSD stands for Long Slow Distance，  1次
 * 有氧慢跑，其他
 
 入门配速参考[^2]
