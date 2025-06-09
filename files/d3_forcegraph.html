@@ -76,7 +76,7 @@
 
   <script>
 
-    fetch('./tdmmacro.json').then(res => res.json()).then(data => {
+    fetch('./tdmmacro_force.json').then(res => res.json()).then(data => {
       const Graph = new ForceGraph(document.getElementById('graph'))
         .width(800)
         .graphData(data)
