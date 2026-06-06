@@ -1,8 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Sat, 06 Jun 2026 06:42:06 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</title><link>https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</link><description>引言：真正的现代化，是减少必须由自己维护的东西
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Sat, 06 Jun 2026 20:15:35 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</title><link>https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</link><description># 从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台
+
+## 引言：真正的现代化，是减少必须由自己维护的东西
 
 个人网站最初往往部署在一台 VPS 上：
 
+```text
 VPS
 ├── Linux
 ├── Nginx / Apache
@@ -10,11 +13,13 @@ VPS
 ├── WordPress
 ├── MySQL
 └── 插件与主题
+```
 
 这种架构直观、灵活，也曾经非常实用。
 
 但即使网站只是展示几篇文章，每一次访问仍然可能触发：
 
+```text
 HTTP 请求
  ↓
 PHP 执行
@@ -24,25 +29,29 @@ PHP 执行
 模板渲染
  ↓
 返回 HTML
+```
 
 网站所有者不仅需要写内容，还需要承担服务器升级、数据库备份、依赖兼容、安全补丁、证书更新、故障排查和性能优化。
 
 当网站迁移到：
 
+```text
 Hugo
 +
 GitHub Pages
 +
 Cloudflare
+```
 
 变化并不仅仅是“网页加载更快”。
 
 更深层的变化是：
 
-把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
+&gt; 把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
 
 在此基础上，再加入一台公网 VPS：
 
+```text
 Cloudflare
 +
 GitHub Pages
@@ -50,51 +59,60 @@ GitHub Pages
 VPS FastAPI
 +
 Streamable HTTP MCP Server
+```
 
 就可以形成一套兼顾静态内容、动态应用、AI 工具调用和未来重型计算扩展能力的个人云计算架构。
 
 这套架构的目标不是堆叠最多的技术，而是：
 
-用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
+&gt; 用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
 
-⸻
+------
 
-一、从三层结构理解云计算架构
+# 一、从三层结构理解云计算架构
 
 任何云计算方案都可以分成三个层次。
 
-层级	需要解决的问题	典型组成
-基础设施层	算力、网络和存储从哪里来？	CDN、VPS、磁盘、对象存储、Workstation
-平台架构层	服务如何部署？请求如何流转？状态存在哪里？	Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker
-经济运营层	系统是否值得长期维护？扩展是否可控？	托管服务、备份、日志、监控、自动部署、维护时间
+| 层级       | 需要解决的问题                             | 典型组成                                              |
+| ---------- | ------------------------------------------ | ----------------------------------------------------- |
+| 基础设施层 | 算力、网络和存储从哪里来？                 | CDN、VPS、磁盘、对象存储、Workstation                 |
+| 平台架构层 | 服务如何部署？请求如何流转？状态存在哪里？ | Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker |
+| 经济运营层 | 系统是否值得长期维护？扩展是否可控？       | 托管服务、备份、日志、监控、自动部署、维护时间        |
 
 很多架构设计只关注第二层：
 
+```text
 使用什么语言？
 使用什么框架？
 要不要上 Kubernetes？
+```
 
 但真正决定长期成本的，通常是第一层和第三层：
 
+```text
 哪些计算必须实时执行？
 哪些文件必须保存在 VPS？
 哪些流量必须经过自己的服务器？
 哪些服务必须由自己维护？
+```
 
 一套好的架构，不是让每台机器都承担所有任务，而是让每一种资源承担它最擅长的工作。
 
-⸻
+------
 
-二、云计算成本的本质：算力、存储和网络
+# 二、云计算成本的本质：算力、存储和网络
 
 云计算的基础资源可以简化为三个部分：
 
+```text
 Compute   算力
 Storage   存储
 Network   网络
+```
 
 传统 VPS 架构的问题并不是 VPS 本身昂贵，而是它很容易成为一个承担所有责任的单点：
 
+```text
 静态文件
 动态网页
 数据库
@@ -104,26 +122,30 @@ Network   网络
 文件下载
 定时任务
 AI 工具
+```
 
 全部集中在一台服务器上。
 
 短期看很方便，长期却会导致：
 
+```text
 资源竞争
 维护复杂
 备份困难
 故障影响范围扩大
 升级风险上升
 扩展边界模糊
+```
 
 更合理的方案是对三类资源分别优化。
 
-⸻
+------
 
-三、目标架构：静态优先，动态收敛，算力分层
+# 三、目标架构：静态优先，动态收敛，算力分层
 
 最终推荐的整体结构如下：
 
+```text
 ┌──────────────────────────────────────────────┐
 │ 第一层：静态内容层                           │
 │                                              │
@@ -172,29 +194,37 @@ AI 工具
 │ CPU、GPU、RAM、NVMe                          │
 │ Python Worker、GIS、模型、本地 LLM            │
 └──────────────────────────────────────────────┘
+```
 
 第一阶段不必一次性部署所有组件。
 
 最重要的是建立清晰边界：
 
+```text
 静态内容
 → 交给静态托管平台
+
 网络分发
 → 交给 CDN
+
 轻量动态能力
 → 交给边缘函数或 VPS
+
 多客户端工具调用
 → 交给 MCP Server
+
 长时间后台任务
 → 交给 Worker
+
 重型计算
 → 未来交给内网 Workstation
+```
 
-⸻
+------
 
-四、算力优势：减少必须实时执行的计算
+# 四、算力优势：减少必须实时执行的计算
 
-1.</description><guid isPermaLink="true">https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</guid><pubDate>Sat, 06 Jun 2026 06:41:39 +0000</pubDate></item><item><title>仰望星空，脚踏实地：人生系统中的 Creativity 与 Productivity</title><link>https://jinsanity07git.github.io/blog//post/yang-wang-xing-kong-%EF%BC%8C-jiao-ta-shi-di-%EF%BC%9A-ren-sheng-xi-tong-zhong-de-%20Creativity%20-yu-%20Productivity.html</link><description>
+## 1.</description><guid isPermaLink="true">https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</guid><pubDate>Sat, 06 Jun 2026 06:41:39 +0000</pubDate></item><item><title>仰望星空，脚踏实地：人生系统中的 Creativity 与 Productivity</title><link>https://jinsanity07git.github.io/blog//post/yang-wang-xing-kong-%EF%BC%8C-jiao-ta-shi-di-%EF%BC%9A-ren-sheng-xi-tong-zhong-de-%20Creativity%20-yu-%20Productivity.html</link><description>
 “仰望星空”与“脚踏实地”这八个字，像一副对联，上联写天，下联写地；上联写远方，下联写眼前。2010 年五四青年节，温家宝总理在北京大学与学生交流时，学生赠以“仰望星空”，他挥毫写下“脚踏实地”相和。后来许多人谈起这件事，总觉得这八个字里藏着一种人生的分寸：既不能只顾低头赶路，也不能总是抬头看云。
 
 若把它放进个人成长与人生系统里来看，“仰望星空”对应的是 **Creativity**，“脚踏实地”对应的是 **Productivity**。一个人活在世上，终究是在这两者之间来回摆渡。白天种地，夜里看天；脚踩泥土，心怀远山。少了哪一样，人生都容易失衡。

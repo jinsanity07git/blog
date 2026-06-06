@@ -10,10 +10,13 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="引言：真正的现代化，是减少必须由自己维护的东西
+<meta name="description" content="# 从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台
+
+## 引言：真正的现代化，是减少必须由自己维护的东西
 
 个人网站最初往往部署在一台 VPS 上：
 
+```text
 VPS
 ├── Linux
 ├── Nginx / Apache
@@ -21,11 +24,13 @@ VPS
 ├── WordPress
 ├── MySQL
 └── 插件与主题
+```
 
 这种架构直观、灵活，也曾经非常实用。
 
 但即使网站只是展示几篇文章，每一次访问仍然可能触发：
 
+```text
 HTTP 请求
  ↓
 PHP 执行
@@ -35,25 +40,29 @@ PHP 执行
 模板渲染
  ↓
 返回 HTML
+```
 
 网站所有者不仅需要写内容，还需要承担服务器升级、数据库备份、依赖兼容、安全补丁、证书更新、故障排查和性能优化。
 
 当网站迁移到：
 
+```text
 Hugo
 +
 GitHub Pages
 +
 Cloudflare
+```
 
 变化并不仅仅是“网页加载更快”。
 
 更深层的变化是：
 
-把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
+> 把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
 
 在此基础上，再加入一台公网 VPS：
 
+```text
 Cloudflare
 +
 GitHub Pages
@@ -61,51 +70,60 @@ GitHub Pages
 VPS FastAPI
 +
 Streamable HTTP MCP Server
+```
 
 就可以形成一套兼顾静态内容、动态应用、AI 工具调用和未来重型计算扩展能力的个人云计算架构。
 
 这套架构的目标不是堆叠最多的技术，而是：
 
-用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
+> 用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
 
-⸻
+------
 
-一、从三层结构理解云计算架构
+# 一、从三层结构理解云计算架构
 
 任何云计算方案都可以分成三个层次。
 
-层级	需要解决的问题	典型组成
-基础设施层	算力、网络和存储从哪里来？	CDN、VPS、磁盘、对象存储、Workstation
-平台架构层	服务如何部署？请求如何流转？状态存在哪里？	Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker
-经济运营层	系统是否值得长期维护？扩展是否可控？	托管服务、备份、日志、监控、自动部署、维护时间
+| 层级       | 需要解决的问题                             | 典型组成                                              |
+| ---------- | ------------------------------------------ | ----------------------------------------------------- |
+| 基础设施层 | 算力、网络和存储从哪里来？                 | CDN、VPS、磁盘、对象存储、Workstation                 |
+| 平台架构层 | 服务如何部署？请求如何流转？状态存在哪里？ | Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker |
+| 经济运营层 | 系统是否值得长期维护？扩展是否可控？       | 托管服务、备份、日志、监控、自动部署、维护时间        |
 
 很多架构设计只关注第二层：
 
+```text
 使用什么语言？
 使用什么框架？
 要不要上 Kubernetes？
+```
 
 但真正决定长期成本的，通常是第一层和第三层：
 
+```text
 哪些计算必须实时执行？
 哪些文件必须保存在 VPS？
 哪些流量必须经过自己的服务器？
 哪些服务必须由自己维护？
+```
 
 一套好的架构，不是让每台机器都承担所有任务，而是让每一种资源承担它最擅长的工作。
 
-⸻
+------
 
-二、云计算成本的本质：算力、存储和网络
+# 二、云计算成本的本质：算力、存储和网络
 
 云计算的基础资源可以简化为三个部分：
 
+```text
 Compute   算力
 Storage   存储
 Network   网络
+```
 
 传统 VPS 架构的问题并不是 VPS 本身昂贵，而是它很容易成为一个承担所有责任的单点：
 
+```text
 静态文件
 动态网页
 数据库
@@ -115,26 +133,30 @@ Network   网络
 文件下载
 定时任务
 AI 工具
+```
 
 全部集中在一台服务器上。
 
 短期看很方便，长期却会导致：
 
+```text
 资源竞争
 维护复杂
 备份困难
 故障影响范围扩大
 升级风险上升
 扩展边界模糊
+```
 
 更合理的方案是对三类资源分别优化。
 
-⸻
+------
 
-三、目标架构：静态优先，动态收敛，算力分层
+# 三、目标架构：静态优先，动态收敛，算力分层
 
 最终推荐的整体结构如下：
 
+```text
 ┌──────────────────────────────────────────────┐
 │ 第一层：静态内容层                           │
 │                                              │
@@ -183,34 +205,45 @@ AI 工具
 │ CPU、GPU、RAM、NVMe                          │
 │ Python Worker、GIS、模型、本地 LLM            │
 └──────────────────────────────────────────────┘
+```
 
 第一阶段不必一次性部署所有组件。
 
 最重要的是建立清晰边界：
 
+```text
 静态内容
 → 交给静态托管平台
+
 网络分发
 → 交给 CDN
+
 轻量动态能力
 → 交给边缘函数或 VPS
+
 多客户端工具调用
 → 交给 MCP Server
+
 长时间后台任务
 → 交给 Worker
+
 重型计算
 → 未来交给内网 Workstation
+```
 
-⸻
+------
 
-四、算力优势：减少必须实时执行的计算
+# 四、算力优势：减少必须实时执行的计算
 
-1.">
+## 1.">
 <meta property="og:title" content="从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台">
-<meta property="og:description" content="引言：真正的现代化，是减少必须由自己维护的东西
+<meta property="og:description" content="# 从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台
+
+## 引言：真正的现代化，是减少必须由自己维护的东西
 
 个人网站最初往往部署在一台 VPS 上：
 
+```text
 VPS
 ├── Linux
 ├── Nginx / Apache
@@ -218,11 +251,13 @@ VPS
 ├── WordPress
 ├── MySQL
 └── 插件与主题
+```
 
 这种架构直观、灵活，也曾经非常实用。
 
 但即使网站只是展示几篇文章，每一次访问仍然可能触发：
 
+```text
 HTTP 请求
  ↓
 PHP 执行
@@ -232,25 +267,29 @@ PHP 执行
 模板渲染
  ↓
 返回 HTML
+```
 
 网站所有者不仅需要写内容，还需要承担服务器升级、数据库备份、依赖兼容、安全补丁、证书更新、故障排查和性能优化。
 
 当网站迁移到：
 
+```text
 Hugo
 +
 GitHub Pages
 +
 Cloudflare
+```
 
 变化并不仅仅是“网页加载更快”。
 
 更深层的变化是：
 
-把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
+> 把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。
 
 在此基础上，再加入一台公网 VPS：
 
+```text
 Cloudflare
 +
 GitHub Pages
@@ -258,51 +297,60 @@ GitHub Pages
 VPS FastAPI
 +
 Streamable HTTP MCP Server
+```
 
 就可以形成一套兼顾静态内容、动态应用、AI 工具调用和未来重型计算扩展能力的个人云计算架构。
 
 这套架构的目标不是堆叠最多的技术，而是：
 
-用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
+> 用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。
 
-⸻
+------
 
-一、从三层结构理解云计算架构
+# 一、从三层结构理解云计算架构
 
 任何云计算方案都可以分成三个层次。
 
-层级	需要解决的问题	典型组成
-基础设施层	算力、网络和存储从哪里来？	CDN、VPS、磁盘、对象存储、Workstation
-平台架构层	服务如何部署？请求如何流转？状态存在哪里？	Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker
-经济运营层	系统是否值得长期维护？扩展是否可控？	托管服务、备份、日志、监控、自动部署、维护时间
+| 层级       | 需要解决的问题                             | 典型组成                                              |
+| ---------- | ------------------------------------------ | ----------------------------------------------------- |
+| 基础设施层 | 算力、网络和存储从哪里来？                 | CDN、VPS、磁盘、对象存储、Workstation                 |
+| 平台架构层 | 服务如何部署？请求如何流转？状态存在哪里？ | Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker |
+| 经济运营层 | 系统是否值得长期维护？扩展是否可控？       | 托管服务、备份、日志、监控、自动部署、维护时间        |
 
 很多架构设计只关注第二层：
 
+```text
 使用什么语言？
 使用什么框架？
 要不要上 Kubernetes？
+```
 
 但真正决定长期成本的，通常是第一层和第三层：
 
+```text
 哪些计算必须实时执行？
 哪些文件必须保存在 VPS？
 哪些流量必须经过自己的服务器？
 哪些服务必须由自己维护？
+```
 
 一套好的架构，不是让每台机器都承担所有任务，而是让每一种资源承担它最擅长的工作。
 
-⸻
+------
 
-二、云计算成本的本质：算力、存储和网络
+# 二、云计算成本的本质：算力、存储和网络
 
 云计算的基础资源可以简化为三个部分：
 
+```text
 Compute   算力
 Storage   存储
 Network   网络
+```
 
 传统 VPS 架构的问题并不是 VPS 本身昂贵，而是它很容易成为一个承担所有责任的单点：
 
+```text
 静态文件
 动态网页
 数据库
@@ -312,26 +360,30 @@ Network   网络
 文件下载
 定时任务
 AI 工具
+```
 
 全部集中在一台服务器上。
 
 短期看很方便，长期却会导致：
 
+```text
 资源竞争
 维护复杂
 备份困难
 故障影响范围扩大
 升级风险上升
 扩展边界模糊
+```
 
 更合理的方案是对三类资源分别优化。
 
-⸻
+------
 
-三、目标架构：静态优先，动态收敛，算力分层
+# 三、目标架构：静态优先，动态收敛，算力分层
 
 最终推荐的整体结构如下：
 
+```text
 ┌──────────────────────────────────────────────┐
 │ 第一层：静态内容层                           │
 │                                              │
@@ -380,34 +432,42 @@ AI 工具
 │ CPU、GPU、RAM、NVMe                          │
 │ Python Worker、GIS、模型、本地 LLM            │
 └──────────────────────────────────────────────┘
+```
 
 第一阶段不必一次性部署所有组件。
 
 最重要的是建立清晰边界：
 
+```text
 静态内容
 → 交给静态托管平台
+
 网络分发
 → 交给 CDN
+
 轻量动态能力
 → 交给边缘函数或 VPS
+
 多客户端工具调用
 → 交给 MCP Server
+
 长时间后台任务
 → 交给 Worker
+
 重型计算
 → 未来交给内网 Workstation
+```
 
-⸻
+------
 
-四、算力优势：减少必须实时执行的计算
+# 四、算力优势：减少必须实时执行的计算
 
-1.">
+## 1.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html">
 <meta property="og:image" content="https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg">
 <title>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -431,7 +491,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
 </style>
 <style>#postBody{font-size:20px}</style>
 
@@ -463,1203 +533,1592 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>引言：真正的现代化，是减少必须由自己维护的东西</p>
+<div class="markdown-body" id="postBody"><h1>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</h1>
+<h2>引言：真正的现代化，是减少必须由自己维护的东西</h2>
 <p>个人网站最初往往部署在一台 VPS 上：</p>
-<p>VPS<br>
-├── Linux<br>
-├── Nginx / Apache<br>
-├── PHP<br>
-├── WordPress<br>
-├── MySQL<br>
-└── 插件与主题</p>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS
+├── Linux
+├── Nginx / Apache
+├── PHP
+├── WordPress
+├── MySQL
+└── 插件与主题
+</code></pre>
 <p>这种架构直观、灵活，也曾经非常实用。</p>
 <p>但即使网站只是展示几篇文章，每一次访问仍然可能触发：</p>
-<p>HTTP 请求<br>
-↓<br>
-PHP 执行<br>
-↓<br>
-数据库查询<br>
-↓<br>
-模板渲染<br>
-↓<br>
-返回 HTML</p>
+<pre lang="text" class="notranslate"><code class="notranslate">HTTP 请求
+ ↓
+PHP 执行
+ ↓
+数据库查询
+ ↓
+模板渲染
+ ↓
+返回 HTML
+</code></pre>
 <p>网站所有者不仅需要写内容，还需要承担服务器升级、数据库备份、依赖兼容、安全补丁、证书更新、故障排查和性能优化。</p>
 <p>当网站迁移到：</p>
-<p>Hugo<br>
-+<br>
-GitHub Pages<br>
-+<br>
-Cloudflare</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Hugo
++
+GitHub Pages
++
+Cloudflare
+</code></pre>
 <p>变化并不仅仅是“网页加载更快”。</p>
 <p>更深层的变化是：</p>
+<blockquote>
 <p>把不必要的实时计算提前完成，把稳定内容变成静态文件，把全球分发交给 CDN，把动态能力收敛为少量明确的服务接口。</p>
+</blockquote>
 <p>在此基础上，再加入一台公网 VPS：</p>
-<p>Cloudflare<br>
-+<br>
-GitHub Pages<br>
-+<br>
-VPS FastAPI<br>
-+<br>
-Streamable HTTP MCP Server</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Cloudflare
++
+GitHub Pages
++
+VPS FastAPI
++
+Streamable HTTP MCP Server
+</code></pre>
 <p>就可以形成一套兼顾静态内容、动态应用、AI 工具调用和未来重型计算扩展能力的个人云计算架构。</p>
 <p>这套架构的目标不是堆叠最多的技术，而是：</p>
+<blockquote>
 <p>用最低的长期运营成本，构建一个足够简单、可以逐步扩展、不会因为增长而被迫推倒重来的系统。</p>
-<p>⸻</p>
-<p>一、从三层结构理解云计算架构</p>
+</blockquote>
+<hr>
+<h1>一、从三层结构理解云计算架构</h1>
 <p>任何云计算方案都可以分成三个层次。</p>
-<p>层级	需要解决的问题	典型组成<br>
-基础设施层	算力、网络和存储从哪里来？	CDN、VPS、磁盘、对象存储、Workstation<br>
-平台架构层	服务如何部署？请求如何流转？状态存在哪里？	Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker<br>
-经济运营层	系统是否值得长期维护？扩展是否可控？	托管服务、备份、日志、监控、自动部署、维护时间</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>层级</th>
+<th>需要解决的问题</th>
+<th>典型组成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基础设施层</td>
+<td>算力、网络和存储从哪里来？</td>
+<td>CDN、VPS、磁盘、对象存储、Workstation</td>
+</tr>
+<tr>
+<td>平台架构层</td>
+<td>服务如何部署？请求如何流转？状态存在哪里？</td>
+<td>Hugo、FastAPI、MCP、Gradio、PostgreSQL、Redis、Docker</td>
+</tr>
+<tr>
+<td>经济运营层</td>
+<td>系统是否值得长期维护？扩展是否可控？</td>
+<td>托管服务、备份、日志、监控、自动部署、维护时间</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>很多架构设计只关注第二层：</p>
-<p>使用什么语言？<br>
-使用什么框架？<br>
-要不要上 Kubernetes？</p>
+<pre lang="text" class="notranslate"><code class="notranslate">使用什么语言？
+使用什么框架？
+要不要上 Kubernetes？
+</code></pre>
 <p>但真正决定长期成本的，通常是第一层和第三层：</p>
-<p>哪些计算必须实时执行？<br>
-哪些文件必须保存在 VPS？<br>
-哪些流量必须经过自己的服务器？<br>
-哪些服务必须由自己维护？</p>
+<pre lang="text" class="notranslate"><code class="notranslate">哪些计算必须实时执行？
+哪些文件必须保存在 VPS？
+哪些流量必须经过自己的服务器？
+哪些服务必须由自己维护？
+</code></pre>
 <p>一套好的架构，不是让每台机器都承担所有任务，而是让每一种资源承担它最擅长的工作。</p>
-<p>⸻</p>
-<p>二、云计算成本的本质：算力、存储和网络</p>
+<hr>
+<h1>二、云计算成本的本质：算力、存储和网络</h1>
 <p>云计算的基础资源可以简化为三个部分：</p>
-<p>Compute   算力<br>
-Storage   存储<br>
-Network   网络</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Compute   算力
+Storage   存储
+Network   网络
+</code></pre>
 <p>传统 VPS 架构的问题并不是 VPS 本身昂贵，而是它很容易成为一个承担所有责任的单点：</p>
-<p>静态文件<br>
-动态网页<br>
-数据库<br>
-日志<br>
-用户上传<br>
-任务执行<br>
-文件下载<br>
-定时任务<br>
-AI 工具</p>
+<pre lang="text" class="notranslate"><code class="notranslate">静态文件
+动态网页
+数据库
+日志
+用户上传
+任务执行
+文件下载
+定时任务
+AI 工具
+</code></pre>
 <p>全部集中在一台服务器上。</p>
 <p>短期看很方便，长期却会导致：</p>
-<p>资源竞争<br>
-维护复杂<br>
-备份困难<br>
-故障影响范围扩大<br>
-升级风险上升<br>
-扩展边界模糊</p>
+<pre lang="text" class="notranslate"><code class="notranslate">资源竞争
+维护复杂
+备份困难
+故障影响范围扩大
+升级风险上升
+扩展边界模糊
+</code></pre>
 <p>更合理的方案是对三类资源分别优化。</p>
-<p>⸻</p>
-<p>三、目标架构：静态优先，动态收敛，算力分层</p>
+<hr>
+<h1>三、目标架构：静态优先，动态收敛，算力分层</h1>
 <p>最终推荐的整体结构如下：</p>
-<p>┌──────────────────────────────────────────────┐<br>
-│ 第一层：静态内容层                           │<br>
-│                                              │<br>
-│ Hugo + GitHub Pages                          │<br>
-│                                              │<br>
-│ 博客、文档、个人主页、静态 Dashboard          │<br>
-│ HTML、CSS、JavaScript、Markdown、图片          │<br>
-└──────────────────────┬───────────────────────┘<br>
-│<br>
-│ HTTPS<br>
-▼<br>
-┌──────────────────────────────────────────────┐<br>
-│ 第二层：网络边缘层                           │<br>
-│                                              │<br>
-│ Cloudflare                                   │<br>
-│                                              │<br>
-│ DNS、TLS、CDN、缓存、访问控制、基础防护        │<br>
-│ 可选：Workers / Pages Functions              │<br>
-└──────────────────────┬───────────────────────┘<br>
-│<br>
-│ HTTPS<br>
-▼<br>
-┌──────────────────────────────────────────────┐<br>
-│ 第三层：公网动态服务层                       │<br>
-│                                              │<br>
-│ VPS                                          │<br>
-│                                              │<br>
-│ Caddy / Nginx                                │<br>
-│ ├── /api/*   → FastAPI                      │<br>
-│ ├── /mcp     → Streamable HTTP MCP Server   │<br>
-│ ├── /ui/*    → 可选 Gradio                  │<br>
-│ └── /health  → 健康检查                     │<br>
-│                                              │<br>
-│ PostgreSQL：业务状态                         │<br>
-│ Redis：可选缓存与任务队列                    │<br>
-│ Docker Compose：服务管理                     │<br>
-└──────────────────────┬───────────────────────┘<br>
-│<br>
-│ 未来按需增加<br>
-▼<br>
-┌──────────────────────────────────────────────┐<br>
-│ 第四层：内网重型计算层                       │<br>
-│                                              │<br>
-│ Workstation                                  │<br>
-│                                              │<br>
-│ CPU、GPU、RAM、NVMe                          │<br>
-│ Python Worker、GIS、模型、本地 LLM            │<br>
-└──────────────────────────────────────────────┘</p>
+<pre lang="text" class="notranslate"><code class="notranslate">┌──────────────────────────────────────────────┐
+│ 第一层：静态内容层                           │
+│                                              │
+│ Hugo + GitHub Pages                          │
+│                                              │
+│ 博客、文档、个人主页、静态 Dashboard          │
+│ HTML、CSS、JavaScript、Markdown、图片          │
+└──────────────────────┬───────────────────────┘
+                       │
+                       │ HTTPS
+                       ▼
+┌──────────────────────────────────────────────┐
+│ 第二层：网络边缘层                           │
+│                                              │
+│ Cloudflare                                   │
+│                                              │
+│ DNS、TLS、CDN、缓存、访问控制、基础防护        │
+│ 可选：Workers / Pages Functions              │
+└──────────────────────┬───────────────────────┘
+                       │
+                       │ HTTPS
+                       ▼
+┌──────────────────────────────────────────────┐
+│ 第三层：公网动态服务层                       │
+│                                              │
+│ VPS                                          │
+│                                              │
+│ Caddy / Nginx                                │
+│ ├── /api/*   → FastAPI                      │
+│ ├── /mcp     → Streamable HTTP MCP Server   │
+│ ├── /ui/*    → 可选 Gradio                  │
+│ └── /health  → 健康检查                     │
+│                                              │
+│ PostgreSQL：业务状态                         │
+│ Redis：可选缓存与任务队列                    │
+│ Docker Compose：服务管理                     │
+└──────────────────────┬───────────────────────┘
+                       │
+                       │ 未来按需增加
+                       ▼
+┌──────────────────────────────────────────────┐
+│ 第四层：内网重型计算层                       │
+│                                              │
+│ Workstation                                  │
+│                                              │
+│ CPU、GPU、RAM、NVMe                          │
+│ Python Worker、GIS、模型、本地 LLM            │
+└──────────────────────────────────────────────┘
+</code></pre>
 <p>第一阶段不必一次性部署所有组件。</p>
 <p>最重要的是建立清晰边界：</p>
-<p>静态内容<br>
-→ 交给静态托管平台<br>
-网络分发<br>
-→ 交给 CDN<br>
-轻量动态能力<br>
-→ 交给边缘函数或 VPS<br>
-多客户端工具调用<br>
-→ 交给 MCP Server<br>
-长时间后台任务<br>
-→ 交给 Worker<br>
-重型计算<br>
-→ 未来交给内网 Workstation</p>
-<p>⸻</p>
-<p>四、算力优势：减少必须实时执行的计算</p>
-<ol>
-<li>将运行时计算转移到构建时</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">静态内容
+→ 交给静态托管平台
+
+网络分发
+→ 交给 CDN
+
+轻量动态能力
+→ 交给边缘函数或 VPS
+
+多客户端工具调用
+→ 交给 MCP Server
+
+长时间后台任务
+→ 交给 Worker
+
+重型计算
+→ 未来交给内网 Workstation
+</code></pre>
+<hr>
+<h1>四、算力优势：减少必须实时执行的计算</h1>
+<h2>1. 将运行时计算转移到构建时</h2>
 <p>传统 WordPress 页面通常在用户访问时动态生成：</p>
-<p>用户访问<br>
-↓<br>
-运行 PHP<br>
-↓<br>
-查询 MySQL<br>
-↓<br>
-渲染模板<br>
-↓<br>
-返回页面</p>
+<pre lang="text" class="notranslate"><code class="notranslate">用户访问
+ ↓
+运行 PHP
+ ↓
+查询 MySQL
+ ↓
+渲染模板
+ ↓
+返回页面
+</code></pre>
 <p>Hugo 的思路完全不同：</p>
-<p>Markdown<br>
-↓<br>
-Hugo Build<br>
-↓<br>
-预先生成 HTML、CSS 和 JavaScript<br>
-↓<br>
-用户直接获取静态文件</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Markdown
+ ↓
+Hugo Build
+ ↓
+预先生成 HTML、CSS 和 JavaScript
+ ↓
+用户直接获取静态文件
+</code></pre>
 <p>计算发生时间发生了变化：</p>
-<p>Run Time Compute<br>
-↓<br>
-Build Time Compute</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Run Time Compute
+        ↓
+Build Time Compute
+</code></pre>
 <p>这意味着：</p>
-<p>访问量增加<br>
-≠<br>
-VPS CPU 负载同比增加</p>
+<pre lang="text" class="notranslate"><code class="notranslate">访问量增加
+≠
+VPS CPU 负载同比增加
+</code></pre>
 <p>只要内容没有变化，就没有必要为每一位访客重新生成同一份网页。</p>
 <p>这是降低运营成本最有效的方式之一：</p>
+<blockquote>
 <p>最便宜的计算不是更低价的计算，而是不需要重复执行的计算。</p>
-<p>⸻</p>
-<ol start="2">
-<li>将轻量计算留在边缘</li>
-</ol>
+</blockquote>
+<hr>
+<h2>2. 将轻量计算留在边缘</h2>
 <p>部分动态功能不值得占用 VPS：</p>
-<p>短链接跳转<br>
-联系表单校验<br>
-简单访问控制<br>
-请求重定向<br>
-少量区域化内容<br>
-轻量 API 代理</p>
+<pre lang="text" class="notranslate"><code class="notranslate">短链接跳转
+联系表单校验
+简单访问控制
+请求重定向
+少量区域化内容
+轻量 API 代理
+</code></pre>
 <p>这些任务适合交给 Cloudflare Workers 或 Pages Functions。</p>
 <p>边缘函数的价值不是替代 VPS，而是：</p>
-<p>让短小、无状态、低延迟的逻辑<br>
-在靠近用户的位置执行</p>
+<pre lang="text" class="notranslate"><code class="notranslate">让短小、无状态、低延迟的逻辑
+在靠近用户的位置执行
+</code></pre>
 <p>这样可以减少：</p>
-<p>VPS 请求数量<br>
-跨区域网络往返<br>
-后端负载<br>
-故障影响范围</p>
-<p>⸻</p>
-<ol start="3">
-<li>将 VPS 保留给真正需要服务器的任务</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 请求数量
+跨区域网络往返
+后端负载
+故障影响范围
+</code></pre>
+<hr>
+<h2>3. 将 VPS 保留给真正需要服务器的任务</h2>
 <p>VPS 适合承担：</p>
-<p>身份验证<br>
-权限管理<br>
-工具调用<br>
-任务提交<br>
-数据库查询<br>
-状态管理<br>
-日志索引<br>
-轻量脚本<br>
-API 聚合</p>
+<pre lang="text" class="notranslate"><code class="notranslate">身份验证
+权限管理
+工具调用
+任务提交
+数据库查询
+状态管理
+日志索引
+轻量脚本
+API 聚合
+</code></pre>
 <p>VPS 不必承担：</p>
-<p>全球静态文件分发<br>
-每次访问都重复生成网页<br>
-大型文件长期存储<br>
-重型 GPU 推理<br>
-超长时间模型计算</p>
+<pre lang="text" class="notranslate"><code class="notranslate">全球静态文件分发
+每次访问都重复生成网页
+大型文件长期存储
+重型 GPU 推理
+超长时间模型计算
+</code></pre>
 <p>这使 VPS 从一台“包办所有工作的服务器”，转变成：</p>
+<blockquote>
 <p>一个低负载、稳定、职责明确的公网协调节点。</p>
-<p>⸻</p>
-<ol start="4">
-<li>重型计算可以延后接入 Workstation</li>
-</ol>
+</blockquote>
+<hr>
+<h2>4. 重型计算可以延后接入 Workstation</h2>
 <p>当任务逐步增加，例如：</p>
-<p>交通模型<br>
-GIS 空间分析<br>
-大型 DataFrame<br>
-矩阵运算<br>
-批量数据处理<br>
-本地 LLM<br>
-Ollama<br>
-GPU 推理</p>
+<pre lang="text" class="notranslate"><code class="notranslate">交通模型
+GIS 空间分析
+大型 DataFrame
+矩阵运算
+批量数据处理
+本地 LLM
+Ollama
+GPU 推理
+</code></pre>
 <p>不要急着购买更昂贵的 VPS。</p>
 <p>可以保留现有公网入口，在内网增加 Workstation：</p>
-<p>手机或桌面 Client<br>
-↓<br>
-VPS<br>
-↓<br>
-任务队列<br>
-↓<br>
-内网 Workstation<br>
-↓<br>
-CPU / GPU / RAM / NVMe</p>
+<pre lang="text" class="notranslate"><code class="notranslate">手机或桌面 Client
+ ↓
+VPS
+ ↓
+任务队列
+ ↓
+内网 Workstation
+ ↓
+CPU / GPU / RAM / NVMe
+</code></pre>
 <p>VPS 负责稳定性，Workstation 负责算力。</p>
 <p>两者职责分离：</p>
-<h1>VPS</h1>
-<h1>门卫、前台、调度中心<br>
-Workstation</h1>
-<p>机房、工厂、算力节点</p>
-<p>⸻</p>
-<ol start="5">
-<li>算力成本总结</li>
-</ol>
-<p>架构方式	算力消耗方式	长期成本特征<br>
-WordPress 动态页面	每次访问重复执行 PHP 和数据库查询	流量增长会增加服务器压力<br>
-Hugo 静态页面	发布时构建一次，访问时直接分发	访问成本显著降低<br>
-Cloudflare 边缘函数	轻量逻辑在边缘按需执行	减少 VPS 请求和延迟<br>
-VPS FastAPI	承担必要的业务逻辑	保持服务清晰可控<br>
-Workstation Worker	承担重型任务	按需扩展，不污染公网服务</p>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS
+=
+门卫、前台、调度中心
+
+Workstation
+=
+机房、工厂、算力节点
+</code></pre>
+<hr>
+<h2>5. 算力成本总结</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>架构方式</th>
+<th>算力消耗方式</th>
+<th>长期成本特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WordPress 动态页面</td>
+<td>每次访问重复执行 PHP 和数据库查询</td>
+<td>流量增长会增加服务器压力</td>
+</tr>
+<tr>
+<td>Hugo 静态页面</td>
+<td>发布时构建一次，访问时直接分发</td>
+<td>访问成本显著降低</td>
+</tr>
+<tr>
+<td>Cloudflare 边缘函数</td>
+<td>轻量逻辑在边缘按需执行</td>
+<td>减少 VPS 请求和延迟</td>
+</tr>
+<tr>
+<td>VPS FastAPI</td>
+<td>承担必要的业务逻辑</td>
+<td>保持服务清晰可控</td>
+</tr>
+<tr>
+<td>Workstation Worker</td>
+<td>承担重型任务</td>
+<td>按需扩展，不污染公网服务</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>长期原则可以概括为：</p>
-<p>可以预计算的，不实时计算；<br>
-可以缓存的，不重复计算；<br>
-可以异步的，不阻塞请求；<br>
-可以分层的，不集中在一台机器。</p>
-<p>⸻</p>
-<p>五、存储优势：让不同数据进入不同仓库</p>
-<ol>
-<li>传统 VPS 容易变成数据杂物间</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">可以预计算的，不实时计算；
+可以缓存的，不重复计算；
+可以异步的，不阻塞请求；
+可以分层的，不集中在一台机器。
+</code></pre>
+<hr>
+<h1>五、存储优势：让不同数据进入不同仓库</h1>
+<h2>1. 传统 VPS 容易变成数据杂物间</h2>
 <p>一个长期运行的 VPS 很容易逐渐堆积：</p>
-<p>数据库<br>
-网站源代码<br>
-上传文件<br>
-日志<br>
-缓存<br>
-备份<br>
-图片<br>
-模型结果<br>
-临时文件<br>
-用户下载</p>
+<pre lang="text" class="notranslate"><code class="notranslate">数据库
+网站源代码
+上传文件
+日志
+缓存
+备份
+图片
+模型结果
+临时文件
+用户下载
+</code></pre>
 <p>这会导致：</p>
-<p>磁盘空间难以管理<br>
-备份越来越慢<br>
-恢复过程复杂<br>
-权限边界混乱<br>
-服务器迁移困难</p>
+<pre lang="text" class="notranslate"><code class="notranslate">磁盘空间难以管理
+备份越来越慢
+恢复过程复杂
+权限边界混乱
+服务器迁移困难
+</code></pre>
 <p>更合理的方案不是不断扩大磁盘，而是按数据性质分层。</p>
-<p>⸻</p>
-<ol start="2">
-<li>推荐的存储分层</li>
-</ol>
-<p>数据类型	推荐存储位置	原因<br>
-博客 Markdown	Git 仓库	可版本控制、可回滚<br>
-Hugo 生成的静态文件	GitHub Pages 或 Cloudflare Pages	不占用 VPS 存储<br>
-图片、附件、报告	对象存储	便于扩展和下载<br>
-用户、权限、任务元数据	PostgreSQL	适合结构化查询<br>
-临时缓存	Redis	可以快速读写，也可以重建<br>
-大型输入文件	对象存储或内网 NAS	避免 VPS 成为中转瓶颈<br>
-GPU 模型和工作数据	Workstation 本地 NVMe	靠近计算节点，减少传输<br>
-审计日志	数据库或专用日志目录	便于追踪和归档</p>
+<hr>
+<h2>2. 推荐的存储分层</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>数据类型</th>
+<th>推荐存储位置</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>博客 Markdown</td>
+<td>Git 仓库</td>
+<td>可版本控制、可回滚</td>
+</tr>
+<tr>
+<td>Hugo 生成的静态文件</td>
+<td>GitHub Pages 或 Cloudflare Pages</td>
+<td>不占用 VPS 存储</td>
+</tr>
+<tr>
+<td>图片、附件、报告</td>
+<td>对象存储</td>
+<td>便于扩展和下载</td>
+</tr>
+<tr>
+<td>用户、权限、任务元数据</td>
+<td>PostgreSQL</td>
+<td>适合结构化查询</td>
+</tr>
+<tr>
+<td>临时缓存</td>
+<td>Redis</td>
+<td>可以快速读写，也可以重建</td>
+</tr>
+<tr>
+<td>大型输入文件</td>
+<td>对象存储或内网 NAS</td>
+<td>避免 VPS 成为中转瓶颈</td>
+</tr>
+<tr>
+<td>GPU 模型和工作数据</td>
+<td>Workstation 本地 NVMe</td>
+<td>靠近计算节点，减少传输</td>
+</tr>
+<tr>
+<td>审计日志</td>
+<td>数据库或专用日志目录</td>
+<td>便于追踪和归档</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>这一原则可以压缩为：</p>
-<p>Git<br>
-→ 保存内容和配置<br>
-数据库<br>
-→ 保存业务状态<br>
-对象存储<br>
-→ 保存大文件<br>
-缓存<br>
-→ 保存可重建的临时数据<br>
-Workstation 本地磁盘<br>
-→ 保存靠近算力的数据</p>
-<p>⸻</p>
-<ol start="3">
-<li>大文件不要反复经过 VPS</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">Git
+→ 保存内容和配置
+
+数据库
+→ 保存业务状态
+
+对象存储
+→ 保存大文件
+
+缓存
+→ 保存可重建的临时数据
+
+Workstation 本地磁盘
+→ 保存靠近算力的数据
+</code></pre>
+<hr>
+<h2>3. 大文件不要反复经过 VPS</h2>
 <p>假设用户提交一个大型任务：</p>
-<p>上传 5 GB 数据<br>
-↓<br>
-VPS<br>
-↓<br>
-Workstation 下载<br>
-↓<br>
-生成 3 GB 报告<br>
-↓<br>
-上传回 VPS<br>
-↓<br>
-手机下载</p>
+<pre lang="text" class="notranslate"><code class="notranslate">上传 5 GB 数据
+ ↓
+VPS
+ ↓
+Workstation 下载
+ ↓
+生成 3 GB 报告
+ ↓
+上传回 VPS
+ ↓
+手机下载
+</code></pre>
 <p>此时 VPS 同时承担：</p>
-<p>公网入口<br>
-中转站<br>
-存储节点<br>
-带宽瓶颈</p>
+<pre lang="text" class="notranslate"><code class="notranslate">公网入口
+中转站
+存储节点
+带宽瓶颈
+</code></pre>
 <p>更合理的方式是：</p>
-<p>用户<br>
-↓<br>
-对象存储<br>
-↓<br>
-Workstation<br>
-Workstation<br>
-↓<br>
-对象存储<br>
-↓<br>
-用户</p>
+<pre lang="text" class="notranslate"><code class="notranslate">用户
+ ↓
+对象存储
+ ↓
+Workstation
+
+Workstation
+ ↓
+对象存储
+ ↓
+用户
+</code></pre>
 <p>VPS 只保存：</p>
-<p>任务 ID<br>
-文件地址<br>
-权限<br>
-状态<br>
-结果索引</p>
+<pre lang="text" class="notranslate"><code class="notranslate">任务 ID
+文件地址
+权限
+状态
+结果索引
+</code></pre>
 <p>VPS 不必搬运所有数据。</p>
-<p>⸻</p>
-<ol start="4">
-<li>存储成本总结</li>
-</ol>
+<hr>
+<h2>4. 存储成本总结</h2>
 <p>传统思路是：</p>
-<p>VPS 磁盘不够<br>
-→ 扩容磁盘</p>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 磁盘不够
+→ 扩容磁盘
+</code></pre>
 <p>分层思路是：</p>
-<p>先判断数据性质<br>
-→ 放到最适合的位置</p>
+<pre lang="text" class="notranslate"><code class="notranslate">先判断数据性质
+→ 放到最适合的位置
+</code></pre>
 <p>这样做的直接收益包括：</p>
-<p>VPS 更轻量<br>
-备份更简单<br>
-恢复更快<br>
-磁盘压力更低<br>
-扩展不必停机<br>
-数据迁移更容易</p>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 更轻量
+备份更简单
+恢复更快
+磁盘压力更低
+扩展不必停机
+数据迁移更容易
+</code></pre>
 <p>长期原则是：</p>
+<blockquote>
 <p>数据不要因为方便而全部堆在同一台机器上。<br>
 存储位置应该由数据性质决定，而不是由最初部署位置决定。</p>
-<p>⸻</p>
-<p>六、网络优势：让数据走最短、最合理的路径</p>
-<ol>
-<li>静态内容由 CDN 分发</li>
-</ol>
+</blockquote>
+<hr>
+<h1>六、网络优势：让数据走最短、最合理的路径</h1>
+<h2>1. 静态内容由 CDN 分发</h2>
 <p>单一 VPS 的网络路径是：</p>
-<p>全球用户<br>
-↓<br>
-固定位置的 VPS</p>
+<pre lang="text" class="notranslate"><code class="notranslate">全球用户
+ ↓
+固定位置的 VPS
+</code></pre>
 <p>静态 CDN 的网络路径是：</p>
-<p>全球用户<br>
-↓<br>
-附近的边缘节点<br>
-↓<br>
-缓存内容</p>
+<pre lang="text" class="notranslate"><code class="notranslate">全球用户
+ ↓
+附近的边缘节点
+ ↓
+缓存内容
+</code></pre>
 <p>可以把它理解成物流系统：</p>
-<h1>单一 VPS</h1>
-<h1>所有商品都从中央仓库发货<br>
-CDN</h1>
-<p>提前把常用商品配送到区域仓库</p>
+<pre lang="text" class="notranslate"><code class="notranslate">单一 VPS
+=
+所有商品都从中央仓库发货
+
+CDN
+=
+提前把常用商品配送到区域仓库
+</code></pre>
 <p>对于：</p>
-<p>HTML<br>
-CSS<br>
-JavaScript<br>
-图片<br>
-字体<br>
-普通附件</p>
+<pre lang="text" class="notranslate"><code class="notranslate">HTML
+CSS
+JavaScript
+图片
+字体
+普通附件
+</code></pre>
 <p>CDN 比单一 VPS 更合理。</p>
 <p>这不仅改善加载速度，也降低 VPS 的带宽消耗。</p>
-<p>⸻</p>
-<ol start="2">
-<li>动态请求只发送必要数据</li>
-</ol>
+<hr>
+<h2>2. 动态请求只发送必要数据</h2>
 <p>静态网页仍然可以成为动态应用入口。</p>
 <p>例如：</p>
-<p>GitHub Pages 上的 Dashboard<br>
-↓<br>
-JavaScript<br>
-↓<br>
-api.example.com<br>
-↓<br>
-VPS FastAPI</p>
+<pre lang="text" class="notranslate"><code class="notranslate">GitHub Pages 上的 Dashboard
+ ↓
+JavaScript
+ ↓
+api.example.com
+ ↓
+VPS FastAPI
+</code></pre>
 <p>页面外壳是静态的，只有真正变化的数据通过 API 请求获取：</p>
-<p>任务状态<br>
-系统信息<br>
-用户权限<br>
-日志摘要<br>
-报告索引</p>
+<pre lang="text" class="notranslate"><code class="notranslate">任务状态
+系统信息
+用户权限
+日志摘要
+报告索引
+</code></pre>
 <p>因此：</p>
-<p>不变化的内容<br>
-→ CDN 缓存<br>
-变化的数据<br>
-→ API 动态获取</p>
+<pre lang="text" class="notranslate"><code class="notranslate">不变化的内容
+→ CDN 缓存
+
+变化的数据
+→ API 动态获取
+</code></pre>
 <p>这比每次请求都重新下载完整页面更高效。</p>
-<p>⸻</p>
-<ol start="3">
-<li>重型计算结果使用对象存储直传</li>
-</ol>
+<hr>
+<h2>3. 重型计算结果使用对象存储直传</h2>
 <p>网络设计应该避免不必要的中转：</p>
-<p>错误方式：<br>
-浏览器 → VPS → Workstation → VPS → 浏览器<br>
-更合理：<br>
-浏览器 → 对象存储<br>
-Workstation → 对象存储<br>
-VPS 只管理元数据</p>
+<pre lang="text" class="notranslate"><code class="notranslate">错误方式：
+浏览器 → VPS → Workstation → VPS → 浏览器
+
+更合理：
+浏览器 → 对象存储
+Workstation → 对象存储
+VPS 只管理元数据
+</code></pre>
 <p>这会明显减少：</p>
-<p>VPS 带宽占用<br>
-磁盘 I/O<br>
-内存压力<br>
-传输时间<br>
-失败重试成本</p>
-<p>⸻</p>
-<ol start="4">
-<li>内网 Workstation 不直接暴露公网</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 带宽占用
+磁盘 I/O
+内存压力
+传输时间
+失败重试成本
+</code></pre>
+<hr>
+<h2>4. 内网 Workstation 不直接暴露公网</h2>
 <p>未来接入 Workstation 时，不建议直接开放：</p>
-<p>Workstation:8000</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Workstation:8000
+</code></pre>
 <p>因为 Workstation 往往保存：</p>
-<p>源代码<br>
-模型<br>
-数据<br>
-SSH 密钥<br>
-内部目录<br>
-GPU 服务<br>
-开发环境</p>
+<pre lang="text" class="notranslate"><code class="notranslate">源代码
+模型
+数据
+SSH 密钥
+内部目录
+GPU 服务
+开发环境
+</code></pre>
 <p>更安全的路径是：</p>
-<p>公网用户<br>
-↓<br>
-Cloudflare<br>
-↓<br>
-VPS<br>
-↓<br>
-私有网络<br>
-↓<br>
-Workstation</p>
+<pre lang="text" class="notranslate"><code class="notranslate">公网用户
+ ↓
+Cloudflare
+ ↓
+VPS
+ ↓
+私有网络
+ ↓
+Workstation
+</code></pre>
 <p>VPS 与 Workstation 可以通过：</p>
-<p>Tailscale<br>
-WireGuard<br>
-Cloudflare Tunnel</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Tailscale
+WireGuard
+Cloudflare Tunnel
+</code></pre>
 <p>建立私有通信。</p>
 <p>如果使用 Cloudflare Tunnel，内网机器可以主动建立向外连接，而不需要开放入站端口。</p>
-<p>⸻</p>
-<ol start="5">
-<li>网络成本总结</li>
-</ol>
-<p>流量类型	推荐路径<br>
-博客和静态资源	CDN → 用户<br>
-普通 API 请求	用户 → VPS<br>
-MCP 工具调用	Client → VPS /mcp<br>
-任务进度	VPS → Client，优先 SSE<br>
-大文件上传	用户 → 对象存储<br>
-大文件下载	对象存储 → 用户<br>
-内网重型任务	VPS → 私有网络 → Workstation</p>
+<hr>
+<h2>5. 网络成本总结</h2>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>流量类型</th>
+<th>推荐路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>博客和静态资源</td>
+<td>CDN → 用户</td>
+</tr>
+<tr>
+<td>普通 API 请求</td>
+<td>用户 → VPS</td>
+</tr>
+<tr>
+<td>MCP 工具调用</td>
+<td>Client → VPS <code class="notranslate">/mcp</code></td>
+</tr>
+<tr>
+<td>任务进度</td>
+<td>VPS → Client，优先 SSE</td>
+</tr>
+<tr>
+<td>大文件上传</td>
+<td>用户 → 对象存储</td>
+</tr>
+<tr>
+<td>大文件下载</td>
+<td>对象存储 → 用户</td>
+</tr>
+<tr>
+<td>内网重型任务</td>
+<td>VPS → 私有网络 → Workstation</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>长期原则是：</p>
+<blockquote>
 <p>网络优化不是单纯提高带宽，而是减少不必要的数据移动。</p>
-<p>⸻</p>
-<p>七、为什么选择 Streamable HTTP MCP Server？</p>
-<ol>
-<li>从单机工具转向共享工具平台</li>
-</ol>
+</blockquote>
+<hr>
+<h1>七、为什么选择 Streamable HTTP MCP Server？</h1>
+<h2>1. 从单机工具转向共享工具平台</h2>
 <p>MCP 的价值是：</p>
+<blockquote>
 <p>将工具能力抽象成标准化接口，让不同 Client 可以发现并调用同一组工具。</p>
+</blockquote>
 <p>本地 STDIO 模式通常是：</p>
-<p>Claude Code<br>
-↓<br>
-本地子进程<br>
-↓<br>
-本地 MCP Server</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Claude Code
+ ↓
+本地子进程
+ ↓
+本地 MCP Server
+</code></pre>
 <p>适合：</p>
-<p>单机开发<br>
-本地调试<br>
-文件系统工具<br>
-不希望开放网络的脚本</p>
+<pre lang="text" class="notranslate"><code class="notranslate">单机开发
+本地调试
+文件系统工具
+不希望开放网络的脚本
+</code></pre>
 <p>远程 Streamable HTTP 模式则是：</p>
-<p>手机 ────────┐<br>
-MacBook ─────┼──→ VPS MCP Server<br>
-Windows PC ──┤<br>
-自动化脚本 ──┤<br>
-AI Client ───┘</p>
+<pre lang="text" class="notranslate"><code class="notranslate">手机 ────────┐
+MacBook ─────┼──→ VPS MCP Server
+Windows PC ──┤
+自动化脚本 ──┤
+AI Client ───┘
+</code></pre>
 <p>更适合：</p>
-<p>多设备<br>
-多客户端<br>
-集中部署<br>
-统一升级<br>
-统一认证<br>
-统一日志<br>
-统一权限</p>
-<p>⸻</p>
-<ol start="2">
-<li>MCP Server 是能力出口，不是聊天界面</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">多设备
+多客户端
+集中部署
+统一升级
+统一认证
+统一日志
+统一权限
+</code></pre>
+<hr>
+<h2>2. MCP Server 是能力出口，不是聊天界面</h2>
 <p>VPS 可以提供一个统一入口：</p>
-<p><a href="https://api.example.com/mcp" rel="nofollow">https://api.example.com/mcp</a></p>
+<pre lang="text" class="notranslate"><code class="notranslate">https://api.example.com/mcp
+</code></pre>
 <p>暴露工具：</p>
-<p>get_system_status()<br>
-list_reports()<br>
-read_report(filename)<br>
-submit_job(job_type, parameters)<br>
-get_job_status(job_id)<br>
-cancel_job(job_id)<br>
-generate_report(report_type)</p>
+<pre lang="text" class="notranslate"><code class="notranslate">get_system_status()
+list_reports()
+read_report(filename)
+submit_job(job_type, parameters)
+get_job_status(job_id)
+cancel_job(job_id)
+generate_report(report_type)
+</code></pre>
 <p>也可以暴露资源：</p>
-<p>report://latest<br>
-jobs://recent<br>
-docs://architecture</p>
+<pre lang="text" class="notranslate"><code class="notranslate">report://latest
+jobs://recent
+docs://architecture
+</code></pre>
 <p>MCP 解决的是：</p>
-<p>不同 AI Client<br>
-如何用统一方式调用工具</p>
+<pre lang="text" class="notranslate"><code class="notranslate">不同 AI Client
+如何用统一方式调用工具
+</code></pre>
 <p>它不必替代：</p>
-<p>FastAPI<br>
-Gradio<br>
-网页 Dashboard<br>
-后台 Worker<br>
-数据库</p>
-<p>⸻</p>
-<ol start="3">
-<li>Streamable HTTP 的基本机制</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">FastAPI
+Gradio
+网页 Dashboard
+后台 Worker
+数据库
+</code></pre>
+<hr>
+<h2>3. Streamable HTTP 的基本机制</h2>
 <p>远程 MCP Server 提供统一端点：</p>
-<p>POST /mcp<br>
-GET  /mcp</p>
-<p>客户端通过 POST 发送 JSON-RPC 请求：</p>
-<p>{<br>
-"jsonrpc": "2.0",<br>
-"id": 1,<br>
-"method": "tools/list",<br>
-"params": {}<br>
-}</p>
+<pre lang="text" class="notranslate"><code class="notranslate">POST /mcp
+GET  /mcp
+</code></pre>
+<p>客户端通过 <code class="notranslate">POST</code> 发送 JSON-RPC 请求：</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"jsonrpc"</span>: <span class="pl-s"><span class="pl-pds">"</span>2.0<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"id"</span>: <span class="pl-c1">1</span>,
+  <span class="pl-ent">"method"</span>: <span class="pl-s"><span class="pl-pds">"</span>tools/list<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"params"</span>: {}
+}</pre></div>
 <p>调用工具：</p>
-<p>{<br>
-"jsonrpc": "2.0",<br>
-"id": 2,<br>
-"method": "tools/call",<br>
-"params": {<br>
-"name": "get_system_status",<br>
-"arguments": {}<br>
-}<br>
-}</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"jsonrpc"</span>: <span class="pl-s"><span class="pl-pds">"</span>2.0<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"id"</span>: <span class="pl-c1">2</span>,
+  <span class="pl-ent">"method"</span>: <span class="pl-s"><span class="pl-pds">"</span>tools/call<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"params"</span>: {
+    <span class="pl-ent">"name"</span>: <span class="pl-s"><span class="pl-pds">"</span>get_system_status<span class="pl-pds">"</span></span>,
+    <span class="pl-ent">"arguments"</span>: {}
+  }
+}</pre></div>
 <p>对于快速任务：</p>
-<p>Client<br>
-↓ POST /mcp<br>
-Server<br>
-↑ JSON Response</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Client
+ ↓ POST /mcp
+Server
+ ↑ JSON Response
+</code></pre>
 <p>对于持续推送：</p>
-<p>Client<br>
-↓ GET /mcp<br>
-Server<br>
-↑ SSE Stream</p>
-<p>⸻</p>
-<p>八、SSE、WebSocket 和异步任务如何分工？</p>
-<ol>
-<li>SSE：优先用于单向进度推送</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">Client
+ ↓ GET /mcp
+Server
+ ↑ SSE Stream
+</code></pre>
+<hr>
+<h1>八、SSE、WebSocket 和异步任务如何分工？</h1>
+<h2>1. SSE：优先用于单向进度推送</h2>
 <p>SSE 适合：</p>
-<p>任务进度<br>
-日志流<br>
-状态更新<br>
-通知<br>
-流式文本</p>
+<pre lang="text" class="notranslate"><code class="notranslate">任务进度
+日志流
+状态更新
+通知
+流式文本
+</code></pre>
 <p>例如：</p>
-<p>queued<br>
-↓<br>
-running: 10%<br>
-↓<br>
-running: 55%<br>
-↓<br>
-uploading_result: 90%<br>
-↓<br>
-completed</p>
+<pre lang="text" class="notranslate"><code class="notranslate">queued
+ ↓
+running: 10%
+ ↓
+running: 55%
+ ↓
+uploading_result: 90%
+ ↓
+completed
+</code></pre>
 <p>对于手机端尤其合适，因为实现简单，断线后也更容易恢复。</p>
-<p>⸻</p>
-<ol start="2">
-<li>WebSocket：只在真正需要双向实时交互时使用</li>
-</ol>
+<hr>
+<h2>2. WebSocket：只在真正需要双向实时交互时使用</h2>
 <p>WebSocket 适合：</p>
-<p>交互式终端<br>
-远程控制台<br>
-在线协作<br>
-高频双向通信<br>
-持续修改运行参数</p>
+<pre lang="text" class="notranslate"><code class="notranslate">交互式终端
+远程控制台
+在线协作
+高频双向通信
+持续修改运行参数
+</code></pre>
 <p>不要默认引入 WebSocket。</p>
 <p>多数个人工具平台只需要：</p>
-<p>HTTP API<br>
-+<br>
-Streamable HTTP MCP<br>
-+<br>
-SSE</p>
-<p>⸻</p>
-<ol start="3">
-<li>长任务必须从 HTTP 请求中拆出来</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">HTTP API
++
+Streamable HTTP MCP
++
+SSE
+</code></pre>
+<hr>
+<h2>3. 长任务必须从 HTTP 请求中拆出来</h2>
 <p>不要这样设计：</p>
-<p>POST /run-model<br>
-↓<br>
-等待 45 分钟<br>
-↓<br>
-返回结果</p>
+<pre lang="text" class="notranslate"><code class="notranslate">POST /run-model
+ ↓
+等待 45 分钟
+ ↓
+返回结果
+</code></pre>
 <p>更合理的方式是：</p>
-<p>POST /api/jobs<br>
-↓<br>
-返回 job_id<br>
-↓<br>
-后台执行<br>
-↓<br>
-客户端轮询或订阅 SSE</p>
+<pre lang="text" class="notranslate"><code class="notranslate">POST /api/jobs
+ ↓
+返回 job_id
+ ↓
+后台执行
+ ↓
+客户端轮询或订阅 SSE
+</code></pre>
 <p>例如：</p>
-<p>{<br>
-"job_id": "model-run-20260606-001",<br>
-"status": "queued"<br>
-}</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"job_id"</span>: <span class="pl-s"><span class="pl-pds">"</span>model-run-20260606-001<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"status"</span>: <span class="pl-s"><span class="pl-pds">"</span>queued<span class="pl-pds">"</span></span>
+}</pre></div>
 <p>任务状态写入数据库：</p>
-<p>{<br>
-"job_id": "model-run-20260606-001",<br>
-"type": "generate_report",<br>
-"status": "running",<br>
-"progress": 42,<br>
-"message": "正在处理输入文件",<br>
-"result_url": null<br>
-}</p>
-<p>⸻</p>
-<p>九、FastAPI、Gradio、MCP 和 Worker 的职责边界</p>
+<div class="highlight highlight-source-json"><pre class="notranslate">{
+  <span class="pl-ent">"job_id"</span>: <span class="pl-s"><span class="pl-pds">"</span>model-run-20260606-001<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"type"</span>: <span class="pl-s"><span class="pl-pds">"</span>generate_report<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"status"</span>: <span class="pl-s"><span class="pl-pds">"</span>running<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"progress"</span>: <span class="pl-c1">42</span>,
+  <span class="pl-ent">"message"</span>: <span class="pl-s"><span class="pl-pds">"</span>正在处理输入文件<span class="pl-pds">"</span></span>,
+  <span class="pl-ent">"result_url"</span>: <span class="pl-c1">null</span>
+}</pre></div>
+<hr>
+<h1>九、FastAPI、Gradio、MCP 和 Worker 的职责边界</h1>
 <p>这些组件不是互相替代，而是承担不同角色。</p>
-<p>组件	核心职责<br>
-Hugo	将 Markdown 构建为静态页面<br>
-GitHub Pages	托管静态站点<br>
-Cloudflare	CDN、TLS、网络边缘、访问保护<br>
-FastAPI	普通业务 API、认证、任务管理<br>
-Gradio	快速构建手机友好的交互界面<br>
-MCP Server	向多个 AI Client 暴露标准工具<br>
-PostgreSQL	保存用户、权限、任务和审计信息<br>
-Redis	缓存、任务队列、短期事件<br>
-RQ / Celery / Dramatiq	执行可恢复的异步任务<br>
-Docker Compose	固化和管理服务环境<br>
-Workstation	承担 GPU、GIS 和重型计算<br>
-Kubernetes	未来多节点调度，不是当前必需品</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>组件</th>
+<th>核心职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hugo</td>
+<td>将 Markdown 构建为静态页面</td>
+</tr>
+<tr>
+<td>GitHub Pages</td>
+<td>托管静态站点</td>
+</tr>
+<tr>
+<td>Cloudflare</td>
+<td>CDN、TLS、网络边缘、访问保护</td>
+</tr>
+<tr>
+<td>FastAPI</td>
+<td>普通业务 API、认证、任务管理</td>
+</tr>
+<tr>
+<td>Gradio</td>
+<td>快速构建手机友好的交互界面</td>
+</tr>
+<tr>
+<td>MCP Server</td>
+<td>向多个 AI Client 暴露标准工具</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>保存用户、权限、任务和审计信息</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>缓存、任务队列、短期事件</td>
+</tr>
+<tr>
+<td>RQ / Celery / Dramatiq</td>
+<td>执行可恢复的异步任务</td>
+</tr>
+<tr>
+<td>Docker Compose</td>
+<td>固化和管理服务环境</td>
+</tr>
+<tr>
+<td>Workstation</td>
+<td>承担 GPU、GIS 和重型计算</td>
+</tr>
+<tr>
+<td>Kubernetes</td>
+<td>未来多节点调度，不是当前必需品</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>整体关系如下：</p>
-<p>┌──────────────────────────────┐<br>
-│ GitHub Pages                 │<br>
-│ Hugo 静态网站                │<br>
-└──────────────┬───────────────┘<br>
-│<br>
-│ HTTPS<br>
-▼<br>
-┌──────────────────────────────┐<br>
-│ Cloudflare                   │<br>
-│ CDN / DNS / TLS              │<br>
-└──────────────┬───────────────┘<br>
-│<br>
-▼<br>
-┌──────────────────────────────┐<br>
-│ VPS                          │<br>
-│                              │<br>
-│ Caddy / Nginx                │<br>
-│ ├── /ui/*    → Gradio       │<br>
-│ ├── /api/*   → FastAPI      │<br>
-│ ├── /mcp     → MCP Server   │<br>
-│ └── /health  → FastAPI      │<br>
-│                              │<br>
-│ PostgreSQL                   │<br>
-│ Redis                        │<br>
-│ Worker                       │<br>
-└──────────────┬───────────────┘<br>
-│<br>
-│ 未来按需扩展<br>
-▼<br>
-┌──────────────────────────────┐<br>
-│ 内网 Workstation            │<br>
-│                              │<br>
-│ CPU / GPU / RAM / NVMe      │<br>
-│ Worker / Ollama / GIS       │<br>
-└──────────────────────────────┘</p>
-<p>⸻</p>
-<p>十、Gradio 在架构中的合理位置</p>
+<pre lang="text" class="notranslate"><code class="notranslate">┌──────────────────────────────┐
+│ GitHub Pages                 │
+│ Hugo 静态网站                │
+└──────────────┬───────────────┘
+               │
+               │ HTTPS
+               ▼
+┌──────────────────────────────┐
+│ Cloudflare                   │
+│ CDN / DNS / TLS              │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ VPS                          │
+│                              │
+│ Caddy / Nginx                │
+│ ├── /ui/*    → Gradio       │
+│ ├── /api/*   → FastAPI      │
+│ ├── /mcp     → MCP Server   │
+│ └── /health  → FastAPI      │
+│                              │
+│ PostgreSQL                   │
+│ Redis                        │
+│ Worker                       │
+└──────────────┬───────────────┘
+               │
+               │ 未来按需扩展
+               ▼
+┌──────────────────────────────┐
+│ 内网 Workstation            │
+│                              │
+│ CPU / GPU / RAM / NVMe      │
+│ Worker / Ollama / GIS       │
+└──────────────────────────────┘
+</code></pre>
+<hr>
+<h1>十、Gradio 在架构中的合理位置</h1>
 <p>Gradio 很适合快速构建一个手机端工具面板。</p>
 <p>例如：</p>
-<p><a href="https://tools.example.com/" rel="nofollow">https://tools.example.com/</a></p>
+<pre lang="text" class="notranslate"><code class="notranslate">https://tools.example.com/
+</code></pre>
 <p>手机浏览器打开后，可以显示：</p>
-<p>检查 VPS 状态<br>
-提交任务<br>
-查看任务列表<br>
-查看运行进度<br>
-读取日志<br>
-下载报告<br>
-调用本地 LLM</p>
+<pre lang="text" class="notranslate"><code class="notranslate">检查 VPS 状态
+提交任务
+查看任务列表
+查看运行进度
+读取日志
+下载报告
+调用本地 LLM
+</code></pre>
 <p>Gradio 可以处理：</p>
-<p>请求排队<br>
-并发限制<br>
-进度条<br>
-日志流<br>
-文件上传<br>
-结果下载<br>
-简单聊天页面</p>
+<pre lang="text" class="notranslate"><code class="notranslate">请求排队
+并发限制
+进度条
+日志流
+文件上传
+结果下载
+简单聊天页面
+</code></pre>
 <p>但 Gradio 不应该成为整个后台系统。</p>
 <p>它更适合承担：</p>
-<p>交互层</p>
+<pre lang="text" class="notranslate"><code class="notranslate">交互层
+</code></pre>
 <p>而不是：</p>
-<p>持久化任务系统<br>
-权限中心<br>
-数据库<br>
-重型调度器</p>
+<pre lang="text" class="notranslate"><code class="notranslate">持久化任务系统
+权限中心
+数据库
+重型调度器
+</code></pre>
 <p>合理分工是：</p>
-<h1>Gradio</h1>
-<h1>手机端操作台<br>
-FastAPI</h1>
-<h1>业务接口<br>
-MCP Server</h1>
-<h1>AI 工具标准出口<br>
-Redis + Worker</h1>
-<h1>异步任务执行<br>
-PostgreSQL</h1>
-<p>可恢复业务状态</p>
-<p>⸻</p>
-<p>十一、Docker Compose：当前阶段最重要的运维工具</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Gradio
+=
+手机端操作台
+
+FastAPI
+=
+业务接口
+
+MCP Server
+=
+AI 工具标准出口
+
+Redis + Worker
+=
+异步任务执行
+
+PostgreSQL
+=
+可恢复业务状态
+</code></pre>
+<hr>
+<h1>十一、Docker Compose：当前阶段最重要的运维工具</h1>
 <p>Docker 的价值不是炫技，而是减少环境维护成本。</p>
 <p>它解决：</p>
-<p>Python 版本不一致<br>
-依赖散落<br>
-升级难回滚<br>
-服务启动方式不同<br>
-服务器重装恢复困难</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Python 版本不一致
+依赖散落
+升级难回滚
+服务启动方式不同
+服务器重装恢复困难
+</code></pre>
 <p>对于一台 VPS，推荐使用 Docker Compose 管理：</p>
-<p>Caddy<br>
-FastAPI<br>
-MCP Server<br>
-Gradio<br>
-PostgreSQL<br>
-Redis<br>
-Worker</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Caddy
+FastAPI
+MCP Server
+Gradio
+PostgreSQL
+Redis
+Worker
+</code></pre>
 <p>目录结构可以保持简单：</p>
-<p>personal-cloud/<br>
-├── compose.yaml<br>
-├── caddy/<br>
-│   └── Caddyfile<br>
-├── api/<br>
-│   ├── Dockerfile<br>
-│   └── main.py<br>
-├── mcp-server/<br>
-│   ├── Dockerfile<br>
-│   └── app.py<br>
-├── gradio-ui/<br>
-│   ├── Dockerfile<br>
-│   └── app.py<br>
-└── data/<br>
-├── reports/<br>
-└── results/</p>
-<p>示例 compose.yaml：</p>
-<p>services:<br>
-api:<br>
-build: ./api<br>
-restart: unless-stopped<br>
-expose:<br>
-- "8001"<br>
-mcp-server:<br>
-build: ./mcp-server<br>
-restart: unless-stopped<br>
-expose:<br>
-- "8000"<br>
-volumes:<br>
-- ./data/reports:/data/reports:ro<br>
-gradio-ui:<br>
-build: ./gradio-ui<br>
-restart: unless-stopped<br>
-expose:<br>
-- "7860"<br>
-postgres:<br>
-image: postgres:17<br>
-restart: unless-stopped<br>
-environment:<br>
-POSTGRES_DB: personal_cloud<br>
-POSTGRES_USER: app<br>
-POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}<br>
-volumes:<br>
-- postgres_data:/var/lib/postgresql/data<br>
-redis:<br>
-image: redis:8<br>
-restart: unless-stopped<br>
-caddy:<br>
-image: caddy:latest<br>
-restart: unless-stopped<br>
-ports:<br>
-- "80:80"<br>
-- "443:443"<br>
-volumes:<br>
-- ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro<br>
-- caddy_data:/data<br>
-- caddy_config:/config<br>
-depends_on:<br>
-- api<br>
-- mcp-server<br>
-- gradio-ui<br>
-volumes:<br>
-postgres_data:<br>
-caddy_data:<br>
-caddy_config:</p>
-<p>示例 Caddyfile：</p>
-<p>api.example.com {<br>
-handle /mcp* {<br>
-reverse_proxy mcp-server:8000<br>
-}<br>
-handle /api/* {<br>
-reverse_proxy api:8001<br>
-}<br>
-handle /health {<br>
-reverse_proxy api:8001<br>
-}<br>
-}<br>
-tools.example.com {<br>
-reverse_proxy gradio-ui:7860<br>
-}</p>
+<pre lang="text" class="notranslate"><code class="notranslate">personal-cloud/
+├── compose.yaml
+├── caddy/
+│   └── Caddyfile
+├── api/
+│   ├── Dockerfile
+│   └── main.py
+├── mcp-server/
+│   ├── Dockerfile
+│   └── app.py
+├── gradio-ui/
+│   ├── Dockerfile
+│   └── app.py
+└── data/
+    ├── reports/
+    └── results/
+</code></pre>
+<p>示例 <code class="notranslate">compose.yaml</code>：</p>
+<div class="highlight highlight-source-yaml"><pre class="notranslate"><span class="pl-ent">services</span>:
+  <span class="pl-ent">api</span>:
+    <span class="pl-ent">build</span>: <span class="pl-s">./api</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">expose</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>8001<span class="pl-pds">"</span></span>
+
+  <span class="pl-ent">mcp-server</span>:
+    <span class="pl-ent">build</span>: <span class="pl-s">./mcp-server</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">expose</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>8000<span class="pl-pds">"</span></span>
+    <span class="pl-ent">volumes</span>:
+      - <span class="pl-s">./data/reports:/data/reports:ro</span>
+
+  <span class="pl-ent">gradio-ui</span>:
+    <span class="pl-ent">build</span>: <span class="pl-s">./gradio-ui</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">expose</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>7860<span class="pl-pds">"</span></span>
+
+  <span class="pl-ent">postgres</span>:
+    <span class="pl-ent">image</span>: <span class="pl-s">postgres:17</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">environment</span>:
+      <span class="pl-ent">POSTGRES_DB</span>: <span class="pl-s">personal_cloud</span>
+      <span class="pl-ent">POSTGRES_USER</span>: <span class="pl-s">app</span>
+      <span class="pl-ent">POSTGRES_PASSWORD</span>: <span class="pl-s">${POSTGRES_PASSWORD}</span>
+    <span class="pl-ent">volumes</span>:
+      - <span class="pl-s">postgres_data:/var/lib/postgresql/data</span>
+
+  <span class="pl-ent">redis</span>:
+    <span class="pl-ent">image</span>: <span class="pl-s">redis:8</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+
+  <span class="pl-ent">caddy</span>:
+    <span class="pl-ent">image</span>: <span class="pl-s">caddy:latest</span>
+    <span class="pl-ent">restart</span>: <span class="pl-s">unless-stopped</span>
+    <span class="pl-ent">ports</span>:
+      - <span class="pl-s"><span class="pl-pds">"</span>80:80<span class="pl-pds">"</span></span>
+      - <span class="pl-s"><span class="pl-pds">"</span>443:443<span class="pl-pds">"</span></span>
+    <span class="pl-ent">volumes</span>:
+      - <span class="pl-s">./caddy/Caddyfile:/etc/caddy/Caddyfile:ro</span>
+      - <span class="pl-s">caddy_data:/data</span>
+      - <span class="pl-s">caddy_config:/config</span>
+    <span class="pl-ent">depends_on</span>:
+      - <span class="pl-s">api</span>
+      - <span class="pl-s">mcp-server</span>
+      - <span class="pl-s">gradio-ui</span>
+
+<span class="pl-ent">volumes</span>:
+  <span class="pl-ent">postgres_data</span>:
+  <span class="pl-ent">caddy_data</span>:
+  <span class="pl-ent">caddy_config</span>:</pre></div>
+<p>示例 <code class="notranslate">Caddyfile</code>：</p>
+<pre lang="text" class="notranslate"><code class="notranslate">api.example.com {
+    handle /mcp* {
+        reverse_proxy mcp-server:8000
+    }
+
+    handle /api/* {
+        reverse_proxy api:8001
+    }
+
+    handle /health {
+        reverse_proxy api:8001
+    }
+}
+
+tools.example.com {
+    reverse_proxy gradio-ui:7860
+}
+</code></pre>
 <p>启动：</p>
-<p>docker compose up -d --build</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker compose up -d --build</pre></div>
 <p>查看日志：</p>
-<p>docker compose logs -f</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">docker compose logs -f</pre></div>
 <p>更新：</p>
-<p>git pull<br>
-docker compose up -d --build</p>
-<p>⸻</p>
-<p>十二、Kubernetes 什么时候才值得引入？</p>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git pull
+docker compose up -d --build</pre></div>
+<hr>
+<h1>十二、Kubernetes 什么时候才值得引入？</h1>
 <p>Docker 和 Kubernetes 解决的问题不同。</p>
 <p>可以类比为：</p>
-<h1>Docker</h1>
-<h1>标准化集装箱<br>
-Docker Compose</h1>
-<h1>管理一艘船上的集装箱<br>
-Kubernetes</h1>
-<p>管理港口、船队、仓库和调度系统</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Docker
+=
+标准化集装箱
+
+Docker Compose
+=
+管理一艘船上的集装箱
+
+Kubernetes
+=
+管理港口、船队、仓库和调度系统
+</code></pre>
 <p>当前架构如果只有：</p>
-<p>1 台 VPS<br>
-+<br>
-少量 Client<br>
-+<br>
-少量 Worker</p>
+<pre lang="text" class="notranslate"><code class="notranslate">1 台 VPS
++
+少量 Client
++
+少量 Worker
+</code></pre>
 <p>Docker Compose 足够。</p>
 <p>只有当系统逐步发展为：</p>
-<p>多个 VPS<br>
-多个 Workstation<br>
-多个 GPU 节点<br>
-多个 Worker<br>
-多个用户<br>
-服务高可用<br>
-复杂资源调度</p>
+<pre lang="text" class="notranslate"><code class="notranslate">多个 VPS
+多个 Workstation
+多个 GPU 节点
+多个 Worker
+多个用户
+服务高可用
+复杂资源调度
+</code></pre>
 <p>才需要考虑：</p>
-<p>K3s<br>
-或<br>
-Kubernetes</p>
+<pre lang="text" class="notranslate"><code class="notranslate">K3s
+或
+Kubernetes
+</code></pre>
 <p>Kubernetes 能解决：</p>
-<p>容器运行在哪台机器？<br>
-服务需要几份副本？<br>
-容器挂了如何自动恢复？<br>
-流量如何负载均衡？<br>
-GPU 如何调度？<br>
-滚动升级如何进行？</p>
+<pre lang="text" class="notranslate"><code class="notranslate">容器运行在哪台机器？
+服务需要几份副本？
+容器挂了如何自动恢复？
+流量如何负载均衡？
+GPU 如何调度？
+滚动升级如何进行？
+</code></pre>
 <p>但它不会自动解决：</p>
-<p>业务状态设计<br>
-权限边界<br>
-任务语义<br>
-文件备份<br>
-网络安全<br>
-运营成本</p>
+<pre lang="text" class="notranslate"><code class="notranslate">业务状态设计
+权限边界
+任务语义
+文件备份
+网络安全
+运营成本
+</code></pre>
 <p>长期原则是：</p>
+<blockquote>
 <p>先解决可复现部署，再解决多节点调度。<br>
 不要为未来可能出现的问题，提前承担今天必然发生的维护成本。</p>
-<p>⸻</p>
-<p>十三、安全边界：公网工具必须收窄权限</p>
+</blockquote>
+<hr>
+<h1>十三、安全边界：公网工具必须收窄权限</h1>
 <p>远程 MCP Server 不应该直接暴露万能工具。</p>
 <p>不要轻易提供：</p>
-<p>run_any_shell_command(command)<br>
-execute_any_sql(sql)<br>
-read_any_file(path)<br>
-delete_any_file(path)</p>
+<pre lang="text" class="notranslate"><code class="notranslate">run_any_shell_command(command)
+execute_any_sql(sql)
+read_any_file(path)
+delete_any_file(path)
+</code></pre>
 <p>这些接口几乎等价于开放远程 Shell。</p>
 <p>更安全的方式是提供边界明确的工具：</p>
-<p>get_system_status()<br>
-list_reports()<br>
-read_approved_report(filename)<br>
-submit_registered_job(job_type, parameters)<br>
-get_job_status(job_id)<br>
-cancel_job(job_id)<br>
-restart_named_service(service_name)</p>
+<pre lang="text" class="notranslate"><code class="notranslate">get_system_status()
+list_reports()
+read_approved_report(filename)
+submit_registered_job(job_type, parameters)
+get_job_status(job_id)
+cancel_job(job_id)
+restart_named_service(service_name)
+</code></pre>
 <p>可以按风险分层：</p>
-<p>风险级别	示例	执行策略<br>
-低风险	查询状态、读取公开报告	自动执行<br>
-中风险	提交任务、生成报告	需要确认<br>
-高风险	修改配置、重启服务	二次确认并记录日志<br>
-极高风险	任意 Shell、任意 SQL	默认不暴露</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>风险级别</th>
+<th>示例</th>
+<th>执行策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>低风险</td>
+<td>查询状态、读取公开报告</td>
+<td>自动执行</td>
+</tr>
+<tr>
+<td>中风险</td>
+<td>提交任务、生成报告</td>
+<td>需要确认</td>
+</tr>
+<tr>
+<td>高风险</td>
+<td>修改配置、重启服务</td>
+<td>二次确认并记录日志</td>
+</tr>
+<tr>
+<td>极高风险</td>
+<td>任意 Shell、任意 SQL</td>
+<td>默认不暴露</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>公网入口至少需要：</p>
-<p>HTTPS<br>
-身份认证<br>
-权限控制<br>
-输入校验<br>
-Origin 校验<br>
-限流<br>
-审计日志<br>
-超时<br>
-任务取消</p>
+<pre lang="text" class="notranslate"><code class="notranslate">HTTPS
+身份认证
+权限控制
+输入校验
+Origin 校验
+限流
+审计日志
+超时
+任务取消
+</code></pre>
 <p>个人使用时可以先从：</p>
-<p>Cloudflare Access<br>
-+<br>
-HTTPS<br>
-+<br>
-固定 Token</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Cloudflare Access
++
+HTTPS
++
+固定 Token
+</code></pre>
 <p>开始。</p>
 <p>多个用户或多个正式 Client 接入后，再升级到：</p>
-<p>OAuth<br>
-+<br>
-Scope<br>
-+<br>
-审计日志</p>
-<p>⸻</p>
-<p>十四、业务状态必须外置</p>
+<pre lang="text" class="notranslate"><code class="notranslate">OAuth
++
+Scope
++
+审计日志
+</code></pre>
+<hr>
+<h1>十四、业务状态必须外置</h1>
 <p>系统中的关键状态不要只存在于：</p>
-<p>内存<br>
-HTTP 连接<br>
-SSE 连接<br>
-MCP Session<br>
-Gradio 进程<br>
-Worker 进程</p>
+<pre lang="text" class="notranslate"><code class="notranslate">内存
+HTTP 连接
+SSE 连接
+MCP Session
+Gradio 进程
+Worker 进程
+</code></pre>
 <p>正确划分如下：</p>
-<p>状态	推荐位置<br>
-用户信息	PostgreSQL<br>
-权限	PostgreSQL<br>
-任务状态	PostgreSQL<br>
-任务队列	Redis<br>
-临时缓存	Redis<br>
-大型结果	对象存储<br>
-静态内容	Git<br>
-实时连接上下文	内存<br>
-审计日志	PostgreSQL 或日志系统</p>
+<markdown-accessiblity-table><table role="table">
+<thead>
+<tr>
+<th>状态</th>
+<th>推荐位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户信息</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>权限</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>任务状态</td>
+<td>PostgreSQL</td>
+</tr>
+<tr>
+<td>任务队列</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>临时缓存</td>
+<td>Redis</td>
+</tr>
+<tr>
+<td>大型结果</td>
+<td>对象存储</td>
+</tr>
+<tr>
+<td>静态内容</td>
+<td>Git</td>
+</tr>
+<tr>
+<td>实时连接上下文</td>
+<td>内存</td>
+</tr>
+<tr>
+<td>审计日志</td>
+<td>PostgreSQL 或日志系统</td>
+</tr>
+</tbody>
+</table></markdown-accessiblity-table>
 <p>长期原则是：</p>
+<blockquote>
 <p>连接可以断开，服务可以重启，容器可以替换，任务不能丢失。</p>
-<p>⸻</p>
-<p>十五、渐进式实施路线</p>
+</blockquote>
+<hr>
+<h1>十五、渐进式实施路线</h1>
 <p>不要一次性部署最终形态。</p>
 <p>按照真实需求逐步演化。</p>
-<p>阶段一：静态网站</p>
-<p>Hugo<br>
-+<br>
-GitHub Pages<br>
-+<br>
-Cloudflare</p>
+<h2>阶段一：静态网站</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">Hugo
++
+GitHub Pages
++
+Cloudflare
+</code></pre>
 <p>实现：</p>
-<p>博客<br>
-文档<br>
-个人主页<br>
-静态 Dashboard</p>
+<pre lang="text" class="notranslate"><code class="notranslate">博客
+文档
+个人主页
+静态 Dashboard
+</code></pre>
 <p>运营特点：</p>
-<p>几乎没有服务器维护<br>
-静态流量不占 VPS<br>
-发布流程简单</p>
-<p>⸻</p>
-<p>阶段二：加入轻量 VPS</p>
-<p>Caddy<br>
-+<br>
-FastAPI<br>
-+<br>
-Docker Compose</p>
+<pre lang="text" class="notranslate"><code class="notranslate">几乎没有服务器维护
+静态流量不占 VPS
+发布流程简单
+</code></pre>
+<hr>
+<h2>阶段二：加入轻量 VPS</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">Caddy
++
+FastAPI
++
+Docker Compose
+</code></pre>
 <p>实现：</p>
-<p>健康检查<br>
-报告查询<br>
-简单表单<br>
-任务列表<br>
-基础 API</p>
+<pre lang="text" class="notranslate"><code class="notranslate">健康检查
+报告查询
+简单表单
+任务列表
+基础 API
+</code></pre>
 <p>运营特点：</p>
-<p>只维护一台轻量 VPS<br>
-动态能力开始集中管理</p>
-<p>⸻</p>
-<p>阶段三：部署远程 MCP Server</p>
-<p>Streamable HTTP<br>
-+<br>
-/mcp</p>
+<pre lang="text" class="notranslate"><code class="notranslate">只维护一台轻量 VPS
+动态能力开始集中管理
+</code></pre>
+<hr>
+<h2>阶段三：部署远程 MCP Server</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">Streamable HTTP
++
+/mcp
+</code></pre>
 <p>优先实现只读工具：</p>
-<p>get_server_time<br>
-get_system_status<br>
-list_reports<br>
-read_report</p>
+<pre lang="text" class="notranslate"><code class="notranslate">get_server_time
+get_system_status
+list_reports
+read_report
+</code></pre>
 <p>运营特点：</p>
-<p>一套工具服务多个 Client<br>
-环境只维护一份<br>
-工具升级只需部署一次</p>
-<p>⸻</p>
-<p>阶段四：加入手机端 Gradio UI</p>
-<p>tools.example.com<br>
-↓<br>
-Gradio</p>
+<pre lang="text" class="notranslate"><code class="notranslate">一套工具服务多个 Client
+环境只维护一份
+工具升级只需部署一次
+</code></pre>
+<hr>
+<h2>阶段四：加入手机端 Gradio UI</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">tools.example.com
+ ↓
+Gradio
+</code></pre>
 <p>实现：</p>
-<p>任务提交<br>
-状态查看<br>
-日志流<br>
-文件上传<br>
-结果下载<br>
-简单聊天</p>
+<pre lang="text" class="notranslate"><code class="notranslate">任务提交
+状态查看
+日志流
+文件上传
+结果下载
+简单聊天
+</code></pre>
 <p>运营特点：</p>
-<p>快速获得手机端体验<br>
-不必开发原生 App</p>
-<p>⸻</p>
-<p>阶段五：加入异步任务系统</p>
-<p>FastAPI<br>
-+<br>
-PostgreSQL<br>
-+<br>
-Redis<br>
-+<br>
-RQ / Celery / Dramatiq</p>
+<pre lang="text" class="notranslate"><code class="notranslate">快速获得手机端体验
+不必开发原生 App
+</code></pre>
+<hr>
+<h2>阶段五：加入异步任务系统</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">FastAPI
++
+PostgreSQL
++
+Redis
++
+RQ / Celery / Dramatiq
+</code></pre>
 <p>实现：</p>
-<p>submit_job<br>
-get_job_status<br>
-cancel_job<br>
-download_result</p>
+<pre lang="text" class="notranslate"><code class="notranslate">submit_job
+get_job_status
+cancel_job
+download_result
+</code></pre>
 <p>运营特点：</p>
-<p>任务可以跨重启恢复<br>
-前端和执行逻辑解耦</p>
-<p>⸻</p>
-<p>阶段六：接入 Workstation</p>
-<p>VPS<br>
-↓<br>
-私有网络<br>
-↓<br>
-Workstation Worker</p>
+<pre lang="text" class="notranslate"><code class="notranslate">任务可以跨重启恢复
+前端和执行逻辑解耦
+</code></pre>
+<hr>
+<h2>阶段六：接入 Workstation</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS
+ ↓
+私有网络
+ ↓
+Workstation Worker
+</code></pre>
 <p>实现：</p>
-<p>大型 Python 任务<br>
-GIS<br>
-交通模型<br>
-本地 LLM<br>
-GPU 推理</p>
+<pre lang="text" class="notranslate"><code class="notranslate">大型 Python 任务
+GIS
+交通模型
+本地 LLM
+GPU 推理
+</code></pre>
 <p>运营特点：</p>
-<p>无需购买昂贵 GPU VPS<br>
-公网节点继续保持轻量<br>
-Workstation 不直接暴露公网</p>
-<p>⸻</p>
-<p>阶段七：多节点调度</p>
+<pre lang="text" class="notranslate"><code class="notranslate">无需购买昂贵 GPU VPS
+公网节点继续保持轻量
+Workstation 不直接暴露公网
+</code></pre>
+<hr>
+<h2>阶段七：多节点调度</h2>
 <p>当真实需求增长到：</p>
-<p>多台 VPS<br>
-多台 Workstation<br>
-多 GPU<br>
-多个用户<br>
-高可用</p>
+<pre lang="text" class="notranslate"><code class="notranslate">多台 VPS
+多台 Workstation
+多 GPU
+多个用户
+高可用
+</code></pre>
 <p>再考虑：</p>
-<p>K3s<br>
-或<br>
-Kubernetes</p>
-<p>⸻</p>
-<p>十六、从运营成本角度总结整套架构</p>
-<ol>
-<li>算力成本</li>
-</ol>
+<pre lang="text" class="notranslate"><code class="notranslate">K3s
+或
+Kubernetes
+</code></pre>
+<hr>
+<h1>十六、从运营成本角度总结整套架构</h1>
+<h2>1. 算力成本</h2>
 <p>通过静态化、缓存、边缘执行和后台 Worker：</p>
-<p>减少重复计算<br>
-降低 VPS CPU 压力<br>
-避免过早升级服务器<br>
-重型任务按需迁移到 Workstation</p>
+<pre lang="text" class="notranslate"><code class="notranslate">减少重复计算
+降低 VPS CPU 压力
+避免过早升级服务器
+重型任务按需迁移到 Workstation
+</code></pre>
 <p>核心思想：</p>
+<blockquote>
 <p>算力不是越多越好，而是不要把昂贵算力浪费在不必要的实时计算上。</p>
-<p>⸻</p>
-<ol start="2">
-<li>存储成本</li>
-</ol>
+</blockquote>
+<hr>
+<h2>2. 存储成本</h2>
 <p>通过 Git、数据库、缓存、对象存储和本地 NVMe 分层：</p>
-<p>VPS 磁盘保持轻量<br>
-大文件不挤占系统盘<br>
-备份范围更清楚<br>
-恢复过程更简单<br>
-数据迁移更容易</p>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 磁盘保持轻量
+大文件不挤占系统盘
+备份范围更清楚
+恢复过程更简单
+数据迁移更容易
+</code></pre>
 <p>核心思想：</p>
+<blockquote>
 <p>存储不是把所有数据放在同一个地方，而是让不同数据进入不同仓库。</p>
-<p>⸻</p>
-<ol start="3">
-<li>网络成本</li>
-</ol>
+</blockquote>
+<hr>
+<h2>3. 网络成本</h2>
 <p>通过 CDN、静态分发、API 收敛、对象存储直传和私有网络：</p>
-<p>静态流量不经过 VPS<br>
-大文件不经过 VPS 中转<br>
-动态请求只发送必要数据<br>
-Workstation 不暴露公网<br>
-移动端访问路径更清晰</p>
+<pre lang="text" class="notranslate"><code class="notranslate">静态流量不经过 VPS
+大文件不经过 VPS 中转
+动态请求只发送必要数据
+Workstation 不暴露公网
+移动端访问路径更清晰
+</code></pre>
 <p>核心思想：</p>
+<blockquote>
 <p>网络优化不是单纯追求更大带宽，而是减少不必要的数据移动。</p>
-<p>⸻</p>
-<ol start="4">
-<li>运维成本</li>
-</ol>
+</blockquote>
+<hr>
+<h2>4. 运维成本</h2>
 <p>通过托管平台、职责分离和 Docker Compose：</p>
-<p>减少需要手工维护的服务<br>
-降低环境漂移<br>
-升级和回滚更简单<br>
-故障范围更容易定位<br>
-未来扩展不需要推倒重来</p>
+<pre lang="text" class="notranslate"><code class="notranslate">减少需要手工维护的服务
+降低环境漂移
+升级和回滚更简单
+故障范围更容易定位
+未来扩展不需要推倒重来
+</code></pre>
 <p>核心思想：</p>
+<blockquote>
 <p>架构现代化的价值，不是技术栈更新，而是把人的时间从重复维护中释放出来。</p>
-<p>⸻</p>
-<p>十七、十条长期指导原则</p>
-<p>原则一：静态优先</p>
-<p>能在构建时完成，就不要在访问时重复完成。</p>
-<p>原则二：边缘增强，不要边缘滥用</p>
-<p>边缘节点适合短小逻辑，不适合重型计算。</p>
-<p>原则三：VPS 是公网协调节点，不是无限算力池</p>
-<p>VPS 优先承担认证、调度、状态管理和工具出口。</p>
-<p>原则四：减少数据移动</p>
-<p>大文件走对象存储，重型数据靠近计算节点。</p>
-<p>原则五：长任务必须异步化</p>
-<p>提交任务后返回 job_id，不要阻塞 HTTP 请求。</p>
-<p>原则六：业务状态必须外置</p>
-<p>连接可以断，任务不能丢。</p>
-<p>原则七：工具接口必须收窄</p>
-<p>不要默认暴露任意 Shell、任意 SQL 和任意文件访问。</p>
-<p>原则八：MCP 与 FastAPI 各司其职</p>
-<p>MCP 负责标准化工具出口，FastAPI 负责普通业务接口。</p>
-<p>原则九：Docker 优先，Kubernetes 延后</p>
-<p>先解决可复现部署，再解决多节点调度。</p>
-<p>原则十：复杂度必须随真实需求增长</p>
-<p>不要为想象中的规模支付今天的维护成本。</p>
-<p>⸻</p>
-<p>结语：从维护服务器，到管理能力</p>
+</blockquote>
+<hr>
+<h1>十七、十条长期指导原则</h1>
+<h2>原则一：静态优先</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">能在构建时完成，就不要在访问时重复完成。
+</code></pre>
+<h2>原则二：边缘增强，不要边缘滥用</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">边缘节点适合短小逻辑，不适合重型计算。
+</code></pre>
+<h2>原则三：VPS 是公网协调节点，不是无限算力池</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">VPS 优先承担认证、调度、状态管理和工具出口。
+</code></pre>
+<h2>原则四：减少数据移动</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">大文件走对象存储，重型数据靠近计算节点。
+</code></pre>
+<h2>原则五：长任务必须异步化</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">提交任务后返回 job_id，不要阻塞 HTTP 请求。
+</code></pre>
+<h2>原则六：业务状态必须外置</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">连接可以断，任务不能丢。
+</code></pre>
+<h2>原则七：工具接口必须收窄</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">不要默认暴露任意 Shell、任意 SQL 和任意文件访问。
+</code></pre>
+<h2>原则八：MCP 与 FastAPI 各司其职</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">MCP 负责标准化工具出口，FastAPI 负责普通业务接口。
+</code></pre>
+<h2>原则九：Docker 优先，Kubernetes 延后</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">先解决可复现部署，再解决多节点调度。
+</code></pre>
+<h2>原则十：复杂度必须随真实需求增长</h2>
+<pre lang="text" class="notranslate"><code class="notranslate">不要为想象中的规模支付今天的维护成本。
+</code></pre>
+<hr>
+<h1>结语：从维护服务器，到管理能力</h1>
 <p>最初，个人网站可能只是：</p>
-<p>一台 VPS<br>
-+<br>
-一个 WordPress</p>
+<pre lang="text" class="notranslate"><code class="notranslate">一台 VPS
++
+一个 WordPress
+</code></pre>
 <p>经过逐步演化，它可以成为：</p>
-<p>Hugo<br>
-+<br>
-GitHub Pages<br>
-+<br>
-Cloudflare<br>
-+<br>
-VPS FastAPI<br>
-+<br>
-Streamable HTTP MCP Server<br>
-+<br>
-Gradio 手机端界面<br>
-+<br>
-PostgreSQL<br>
-+<br>
-Redis Worker<br>
-+<br>
-未来可选的内网 Workstation</p>
+<pre lang="text" class="notranslate"><code class="notranslate">Hugo
++
+GitHub Pages
++
+Cloudflare
++
+VPS FastAPI
++
+Streamable HTTP MCP Server
++
+Gradio 手机端界面
++
+PostgreSQL
++
+Redis Worker
++
+未来可选的内网 Workstation
+</code></pre>
 <p>表面上看，组件数量增加了。</p>
 <p>但如果边界划分清楚，维护成本反而下降：</p>
-<p>静态内容<br>
-→ 交给静态平台<br>
-网络分发<br>
-→ 交给 CDN<br>
-动态业务<br>
-→ 交给 FastAPI<br>
-AI 工具<br>
-→ 交给 MCP Server<br>
-手机端交互<br>
-→ 交给 Gradio<br>
-任务状态<br>
-→ 交给数据库<br>
-长任务<br>
-→ 交给 Worker<br>
-重型计算<br>
-→ 交给 Workstation<br>
-环境固化<br>
-→ 交给 Docker Compose<br>
-多节点调度<br>
-→ 留给真正需要时的 Kubernetes</p>
+<pre lang="text" class="notranslate"><code class="notranslate">静态内容
+→ 交给静态平台
+
+网络分发
+→ 交给 CDN
+
+动态业务
+→ 交给 FastAPI
+
+AI 工具
+→ 交给 MCP Server
+
+手机端交互
+→ 交给 Gradio
+
+任务状态
+→ 交给数据库
+
+长任务
+→ 交给 Worker
+
+重型计算
+→ 交给 Workstation
+
+环境固化
+→ 交给 Docker Compose
+
+多节点调度
+→ 留给真正需要时的 Kubernetes
+</code></pre>
 <p>这套架构的最终目标不是构建一个复杂的平台。</p>
 <p>而是建立一种长期有效的资源配置方式：</p>
+<blockquote>
 <p>将稳定内容静态化，将动态能力服务化，将工具接口标准化，将业务状态持久化，将重型计算隔离化，将网络流量合理分层，将运维复杂度控制在真实需求之内。</p>
+</blockquote>
 <p>当这些边界建立以后，VPS 就不再只是一台需要不断维护的服务器。</p>
 <p>它会逐渐成为：</p>
-<p>一个可以从手机、电脑、自动化脚本和 AI Client 随时访问的个人云计算入口。</p></div>
+<blockquote>
+<p>一个可以从手机、电脑、自动化脚本和 AI Client 随时访问的个人云计算入口。</p>
+</blockquote></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">comments</button>
@@ -1684,7 +2143,7 @@ if("03/25/2024"!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -1758,7 +2217,70 @@ function iFrameLoading(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
 
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
 
 </script>
 <script src='https://blog.meekdai.com/Gmeek/plugins/GmeekTOC.js'></script><script async src='https://www.googletagmanager.com/gtag/js?id=G-2F8H0XZ7WF'></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-2F8H0XZ7WF');</script><script>console.log(1);if (document.getElementById('user-content-busuanzi') !== null){document.getElementById('user-content-busuanzi').id='busuanzi_container_site_uv';};busuanzi=document.getElementById('busuanzi_container_site_uv');busuanzi.style.display='inline';busuanzi.childNodes[1].id='busuanzi_value_site_uv';busuanzi.childNodes[3].id='busuanzi_value_site_pv';</script><script async src='//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'></script><script>busuanzi.style.display='inline';</script>
