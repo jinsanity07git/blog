@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Sat, 13 Jun 2026 06:47:00 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>在湖畔寻找人生的前沿</title><link>https://jinsanity07git.github.io/blog//post/zai-hu-pan-xun-zhao-ren-sheng-de-qian-yan.html</link><description>## ——帕累托与七色时间账本的寓言
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Jinsanity</title><link>https://jinsanity07git.github.io/blog/</link><description>Land Beyond Sanity</description><copyright>Jinsanity</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://jinsanity07git.github.io/UWMnotebook/src/svg/Mark_RGB_Yellow.svg</url><title>avatar</title><link>https://jinsanity07git.github.io/blog/</link></image><lastBuildDate>Sat, 13 Jun 2026 14:19:03 +0000</lastBuildDate><managingEditor>Jinsanity</managingEditor><ttl>60</ttl><webMaster>Jinsanity</webMaster><item><title>湖畔账簿--帕累托与七色时间的寓言</title><link>https://jinsanity07git.github.io/blog//post/hu-pan-zhang-bu----pa-lei-tuo-yu-qi-se-shi-jian-de-yu-yan.html</link><description>## ——帕累托与七色时间账本的寓言
 
 &gt; **说明：**本文以维尔弗雷多·帕累托的真实生平与思想为背景，人物对话和具体场景为文学化虚构。文中讨论的“人生系统”是一种现代延伸，并非帕累托本人提出的理论。
 
@@ -418,7 +418,7 @@ M(t) = M_0 · e^(-ct)
 
 ⸻
 
-参考资料.</description><guid isPermaLink="true">https://jinsanity07git.github.io/blog//post/zai-hu-pan-xun-zhao-ren-sheng-de-qian-yan.html</guid><pubDate>Sat, 13 Jun 2026 06:43:21 +0000</pubDate></item><item><title>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</title><link>https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</link><description># 从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台
+参考资料.</description><guid isPermaLink="true">https://jinsanity07git.github.io/blog//post/hu-pan-zhang-bu----pa-lei-tuo-yu-qi-se-shi-jian-de-yu-yan.html</guid><pubDate>Sat, 13 Jun 2026 06:43:21 +0000</pubDate></item><item><title>从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台</title><link>https://jinsanity07git.github.io/blog//post/cong-jing-tai-wang-zhan-dao-ge-ren-yun-ji-suan-ru-kou-%EF%BC%9A-gou-jian-di-cheng-ben-%E3%80%81-ke-kuo-zhan-de-duo-ke-hu-duan-%20MCP%20-gong-ju-ping-tai.html</link><description># 从静态网站到个人云计算入口：构建低成本、可扩展的多客户端 MCP 工具平台
 
 ## 引言：真正的现代化，是减少必须由自己维护的东西
 
